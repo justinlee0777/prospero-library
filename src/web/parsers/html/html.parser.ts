@@ -1,6 +1,5 @@
 import div from '../../elements/div.function';
 import { dash, newline, whitespace } from '../../glyphs.const';
-import Transformer from '../../../shared/models/transformer.interface';
 import pageStylesToStyleDeclaration from '../../../shared/utils/container-style-to-style-declaration.function';
 import CreateTextParserConfig from '../models/create-text-parser-config.interface';
 import Parser from '../models/parser.interface';
@@ -74,16 +73,7 @@ export default class HTMLParser implements Parser {
     this.transformers = transformers;
   }
 
-  *generateParserStates(
-    text: string,
-    // parserState?: ParserState,
-    // end = parseEnd
-  ): Generator<string> {
-    // transform text. Tell the transformers they are working with HTML.
-    text = this.transformers.reduce((newText, transformer) => {
-      return transformer.transform(newText);
-    }, text);
-
+  *generateParserStates(text: string): Generator<string> {
     const { pageStyles } = this.config;
 
     const styles: Partial<CSSStyleDeclaration> = {

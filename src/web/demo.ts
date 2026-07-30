@@ -1,9 +1,7 @@
 import {
   FlexibleBookComponent,
-  IndentTransformer,
   listenToClickEvents,
   listenToKeyboardEvents,
-  NewlineTransformer,
 } from './index';
 
 const fileUrl = new URL('./text-samples/tempest.txt', import.meta.url);
@@ -11,8 +9,6 @@ const fileUrl = new URL('./text-samples/tempest.txt', import.meta.url);
 window.addEventListener('DOMContentLoaded', async () => {
   const response = await fetch(fileUrl);
   const text = await response.text();
-
-  console.log('text', text);
 
   const container = document.body;
 
@@ -73,8 +69,6 @@ window.addEventListener('DOMContentLoaded', async () => {
             return text.replaceAll('\n', '');
           },
         },
-        new IndentTransformer(5),
-        new NewlineTransformer({ beginningSections: 4, betweenParagraphs: 0 }),
       ],
     },
     {

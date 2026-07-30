@@ -1,6 +1,5 @@
 import { PagesConfig, PageStyles } from '../../../shared/models';
 import FontLocations from '../../../shared/models/font-locations.interface';
-import Transformer from '../../../shared/models/transformer.interface';
 import Optional from '../../../shared/utils/optional.type';
 import toPixelUnits from '../../../shared/utils/to-pixel-units.function';
 import registerFont from '../../utils/register-font.function';
@@ -115,8 +114,6 @@ export default class ParserBuilder {
       pageStyles: this.containerStyle,
       ...config,
     });
-
-    parser.setTransformers(this.transformers);
 
     return parser;
   }

@@ -7,7 +7,6 @@ import {
 } from '../shared/models';
 import PagesAsIndicesOutput from '../shared/models/pages-as-indices-output.interface';
 import ParserBuilder from './parsers/builders/parser.builder';
-import Transformer from '../shared/models/transformer.interface';
 
 export default class Pages implements IPages {
   private pageGeneratorPromise: Promise<Generator<string>>;
