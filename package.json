@@ -1,0 +1,14 @@
+{
+  "name": "prospero",
+  "version": "2.0.0",
+  "author": "Justin Lee",
+  "description": "",
+  "license": "ISC",
+  "scripts": {
+    "start": "rm -rf .parcel-cache && parcel index.html",
+    "format": "prettier -w ."
+  },
+  "dependencies": {
+    "prettier": "^3.9.6"
+  }
+}

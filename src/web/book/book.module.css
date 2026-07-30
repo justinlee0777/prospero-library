@@ -1,0 +1,44 @@
+.book {
+  overflow: hidden;
+  position: relative;
+}
+
+.bookLoadingIcon {
+  height: 24px;
+  position: absolute;
+  right: 1%;
+  top: 1%;
+  width: 24px;
+}
+
+.bookPagePicker {
+  position: absolute;
+  right: 50%;
+  top: 8px;
+  transform: translateX(50%);
+}
+
+.bookPagePickerInvalid {
+  border-color: red;
+}
+
+.bookBookmark {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+}
+
+.bookTableOfContentsButton {
+  left: 8px;
+  position: absolute;
+  top: 8px;
+}
+
+.bookTableOfContents {
+  height: 100%;
+  left: 0;
+  list-style: none;
+  max-width: 50%;
+  position: absolute;
+  top: 0;
+}

@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "rootDir": "..",
+    "outDir": "dist",
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "declaration": true,
+    "declarationMap": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "paths": {
+      "@shared/*": ["../shared/*"]
+    }
+  },
+  "include": [
+    "./**/*",
+    "../shared/**/*"
+  ]
+}

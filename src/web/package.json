@@ -1,0 +1,19 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "picture-in-picture-js": "^0.2.1"
+  },
+  "devDependencies": {
+    "parcel": "^2.16.4",
+    "typescript": "^7.0.2"
+  }
+}
