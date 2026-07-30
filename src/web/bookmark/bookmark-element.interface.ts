@@ -1,4 +1,4 @@
-import Component from '../model/component.interface';
+import Component from '../models/component.interface';
 import BookmarkData from './bookmark-data.interface';
 
 export default interface BookmarkElement extends HTMLElement, Component {

@@ -1,6 +1,6 @@
-import PageStyles from '../../../models/page-styles.interface';
-import pageStylesToStyleDeclaration from '../../../utils/container-style-to-style-declaration.function';
-import toPixelUnits from '../../../utils/to-pixel-units.function';
+import PageStyles from '../../../shared/models/page-styles.interface';
+import pageStylesToStyleDeclaration from '../../../shared/utils/container-style-to-style-declaration.function';
+import toPixelUnits from '../../../shared/utils/to-pixel-units.function';
 
 /**
  * @params pagesShown is used to double the book width (so as to fit the pages)

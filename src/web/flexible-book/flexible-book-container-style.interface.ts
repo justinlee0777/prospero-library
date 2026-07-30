@@ -1,4 +1,4 @@
-import PageStyles from '../../models/page-styles.interface';
+import PageStyles from '../../shared/models/page-styles.interface';
 
 type FlexibleBookPageStyles = Omit<PageStyles, 'width' | 'height'>;
 

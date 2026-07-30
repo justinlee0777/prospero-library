@@ -1,8 +1,8 @@
 import cssStyles from './loading-screen.module.css';
 
-import div from '../../elements/div.function';
-import pageStylesToStyleDeclaration from '../../utils/container-style-to-style-declaration.function';
-import merge from '../../utils/merge.function';
+import div from '../elements/div.function';
+import pageStylesToStyleDeclaration from '../../shared/utils/container-style-to-style-declaration.function';
+import merge from '../../shared/utils/merge.function';
 import BookIcon from '../assets/book-open-svgrepo-com.svg';
 import CreateBookElement from '../book/create-book-element.interface';
 import getBookStyles from '../book/initialization/get-book-styles.function';

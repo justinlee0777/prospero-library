@@ -1,5 +1,5 @@
-import div from '../../elements/div.function';
-import NullaryFn from '../../utils/nullary-fn.type';
+import div from '../elements/div.function';
+import NullaryFn from '../../shared/utils/nullary-fn.type';
 import BookElement from '../book/book-element.interface';
 import MediaQueryListenerConfig from '../media-query/media-query-listener-config.interface';
 import MediaQueryListenerFactory from '../media-query/media-query-listener.factory';

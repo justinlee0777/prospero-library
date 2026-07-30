@@ -1,8 +1,8 @@
 import styles from './page-picker.module.css';
 
-import createKeydownListener from '../../elements/create-keydown-listener.function';
-import input from '../../elements/input.function';
-import merge from '../../utils/merge.function';
+import createKeydownListener from '../elements/create-keydown-listener.function';
+import input from '../elements/input.function';
+import merge from '../../shared/utils/merge.function';
 import CreatePagePickerElement from './create-page-picker-element.interface';
 import PagePickerElement from './page-picker-element.interface';
 
@@ -19,8 +19,8 @@ const PagePickerComponent: CreatePagePickerElement = (elementConfig = {}) => {
           label: 'Type in the page number and the book will flip to it.',
         },
       },
-      elementConfig
-    )
+      elementConfig,
+    ),
   ) as unknown as PagePickerElement;
 
   function stopPropagation(event: Event) {

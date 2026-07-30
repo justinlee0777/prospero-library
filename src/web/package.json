@@ -2,10 +2,9 @@
   "name": "web",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "build": "tsc --build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "rm -rf .parcel-cache && parcel index.html",
+    "build": "tsc --build"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +12,9 @@
     "picture-in-picture-js": "^0.2.1"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.1.2",
+    "jest": "^30.4.2",
     "parcel": "^2.16.4",
     "typescript": "^7.0.2"
   }

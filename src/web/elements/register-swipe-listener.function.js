@@ -3,76 +3,80 @@ import SwipeDirection from './swipe-direction.enum';
  * @params sensitivity to determine how much movement on the screen the swipe needs to show before calling.
  * @returns a callback that destroys the listeners.
  */
-export default function registerSwipeListener(element, listener, sensitivity = 100) {
-    let stopIO;
-    let removeEventListener;
-    const stopIOSymbol = Symbol('Valid termination of IO.');
-    const createStopIO = (reject) => () => reject(stopIOSymbol);
-    function destroy() {
-        stopIO?.();
-        removeEventListener?.();
-    }
-    async function listenForSwipeEvents() {
-        while (true) {
-            try {
-                const touchstartEvent = await new Promise((resolve, reject) => {
-                    const listenForTouchstart = (event) => {
-                        const { clientX, clientY } = event.changedTouches[0];
-                        resolve({ initialX: clientX, initialY: clientY });
-                    };
-                    stopIO = createStopIO(reject);
-                    removeEventListener = () => element.removeEventListener('touchstart', listenForTouchstart);
-                    element.addEventListener('touchstart', listenForTouchstart, {
-                        once: true,
-                        passive: true,
-                    });
-                });
-                await new Promise((resolve, reject) => {
-                    const listenForTouchend = (event) => {
-                        const { initialX, initialY } = touchstartEvent;
-                        const { clientX, clientY } = event.changedTouches[0];
-                        const diffX = clientX - initialX;
-                        const diffY = clientY - initialY;
-                        let swipeDirections = Array(2);
-                        if (diffX > sensitivity) {
-                            swipeDirections[0] = SwipeDirection.LEFT;
-                        }
-                        else if (diffX < -sensitivity) {
-                            swipeDirections[0] = SwipeDirection.RIGHT;
-                        }
-                        if (diffY > sensitivity) {
-                            swipeDirections[1] = SwipeDirection.UP;
-                        }
-                        else if (diffY < -sensitivity) {
-                            swipeDirections[1] = SwipeDirection.DOWN;
-                        }
-                        if (Math.abs(diffY) > Math.abs(diffX)) {
-                            swipeDirections = swipeDirections.reverse();
-                        }
-                        // Ensure directions are truthy.
-                        swipeDirections = swipeDirections.filter((direction) => Boolean(direction));
-                        listener(swipeDirections);
-                        resolve();
-                    };
-                    stopIO = createStopIO(reject);
-                    removeEventListener = () => element.removeEventListener('touchend', listenForTouchend);
-                    element.addEventListener('touchend', listenForTouchend, {
-                        once: true,
-                        passive: true,
-                    });
-                });
+export default function registerSwipeListener(
+  element,
+  listener,
+  sensitivity = 100,
+) {
+  let stopIO;
+  let removeEventListener;
+  const stopIOSymbol = Symbol('Valid termination of IO.');
+  const createStopIO = (reject) => () => reject(stopIOSymbol);
+  function destroy() {
+    stopIO?.();
+    removeEventListener?.();
+  }
+  async function listenForSwipeEvents() {
+    while (true) {
+      try {
+        const touchstartEvent = await new Promise((resolve, reject) => {
+          const listenForTouchstart = (event) => {
+            const { clientX, clientY } = event.changedTouches[0];
+            resolve({ initialX: clientX, initialY: clientY });
+          };
+          stopIO = createStopIO(reject);
+          removeEventListener = () =>
+            element.removeEventListener('touchstart', listenForTouchstart);
+          element.addEventListener('touchstart', listenForTouchstart, {
+            once: true,
+            passive: true,
+          });
+        });
+        await new Promise((resolve, reject) => {
+          const listenForTouchend = (event) => {
+            const { initialX, initialY } = touchstartEvent;
+            const { clientX, clientY } = event.changedTouches[0];
+            const diffX = clientX - initialX;
+            const diffY = clientY - initialY;
+            let swipeDirections = Array(2);
+            if (diffX > sensitivity) {
+              swipeDirections[0] = SwipeDirection.LEFT;
+            } else if (diffX < -sensitivity) {
+              swipeDirections[0] = SwipeDirection.RIGHT;
             }
-            catch (error) {
-                if (error === stopIOSymbol) {
-                    break;
-                }
-                else {
-                    // Otherwise, recycle the genuinely unhandled error and terminate IO.
-                    throw error;
-                }
+            if (diffY > sensitivity) {
+              swipeDirections[1] = SwipeDirection.UP;
+            } else if (diffY < -sensitivity) {
+              swipeDirections[1] = SwipeDirection.DOWN;
             }
+            if (Math.abs(diffY) > Math.abs(diffX)) {
+              swipeDirections = swipeDirections.reverse();
+            }
+            // Ensure directions are truthy.
+            swipeDirections = swipeDirections.filter((direction) =>
+              Boolean(direction),
+            );
+            listener(swipeDirections);
+            resolve();
+          };
+          stopIO = createStopIO(reject);
+          removeEventListener = () =>
+            element.removeEventListener('touchend', listenForTouchend);
+          element.addEventListener('touchend', listenForTouchend, {
+            once: true,
+            passive: true,
+          });
+        });
+      } catch (error) {
+        if (error === stopIOSymbol) {
+          break;
+        } else {
+          // Otherwise, recycle the genuinely unhandled error and terminate IO.
+          throw error;
         }
+      }
     }
-    listenForSwipeEvents();
-    return destroy;
+  }
+  listenForSwipeEvents();
+  return destroy;
 }

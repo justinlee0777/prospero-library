@@ -1,3 +1,5 @@
+import { describe, expect, jest, test } from '@jest/globals';
+
 import containerStyleToStyleDeclaration from './container-style-to-style-declaration.function';
 
 describe('containerStyleToStyleDeclaration', () => {

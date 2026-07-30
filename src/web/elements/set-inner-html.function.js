@@ -1,3 +1,3 @@
 export default function setInnerHTML(element, innerHTML) {
-    element.innerHTML = innerHTML;
+  element.innerHTML = innerHTML;
 }

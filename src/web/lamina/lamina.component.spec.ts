@@ -1,3 +1,5 @@
+import { describe, expect, jest, test } from '@jest/globals';
+
 jest.mock('../../utils/merge.function', () => (arg: any) => arg);
 
 import LaminaComponent from './lamina.component';

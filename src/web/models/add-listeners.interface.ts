@@ -1,4 +1,4 @@
-import NullaryFn from '../../utils/nullary-fn.type';
+import NullaryFn from '../../shared/utils/nullary-fn.type';
 
 /**
  * For adding behavior for user interactions on Books.

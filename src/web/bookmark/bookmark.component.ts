@@ -1,7 +1,7 @@
 import styles from './bookmark.module.css';
 
-import div from '../../elements/div.function';
-import merge from '../../utils/merge.function';
+import div from '../elements/div.function';
+import merge from '../../shared/utils/merge.function';
 import BookmarkElement from './bookmark-element.interface';
 import CreateBookmarkElement from './create-bookmark-element.interface';
 

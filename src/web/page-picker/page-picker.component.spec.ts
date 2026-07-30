@@ -1,6 +1,8 @@
+import { describe, expect, jest, test } from '@jest/globals';
+
 jest.mock('../../utils/merge.function', () => (arg: any) => arg);
 
-import div from '../../elements/div.function';
+import div from '../elements/div.function';
 import PagePickerComponent from './page-picker.component';
 
 describe('PagePickerComponent', () => {

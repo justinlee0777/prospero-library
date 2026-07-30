@@ -1,7 +1,7 @@
 import styles from './page.module.css';
 
-import div from '../../elements/div.function';
-import merge from '../../utils/merge.function';
+import div from '../elements/div.function';
+import merge from '../../shared/utils/merge.function';
 import CreatePageElement from './create-page-element.interface';
 import pageClassName from './page-class-name.const';
 import PageComponent from './page-element.interface';

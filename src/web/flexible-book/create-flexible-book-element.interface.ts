@@ -1,6 +1,6 @@
-import CreateElementConfig from '../../elements/create-element.config';
-import { PagesConfig } from '../../models';
-import Transformer from '../../transformers/models/transformer.interface';
+import CreateElementConfig from '../elements/create-element.config';
+import { PagesConfig } from '../../shared/models';
+import Transformer from '../../shared/models/transformer.interface';
 import BookConfig from '../book/book-config.interface';
 import FlexibleBookPageStyles from './flexible-book-container-style.interface';
 import FlexibleBookElement from './flexible-book-element.interface';

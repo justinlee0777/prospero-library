@@ -1,7 +1,7 @@
 import styles from './lamina.module.css';
 
-import div from '../../elements/div.function';
-import merge from '../../utils/merge.function';
+import div from '../elements/div.function';
+import merge from '../../shared/utils/merge.function';
 import CreateLaminaElement from './create-lamina-element.interface';
 import LaminaElement from './lamina-element.interface';
 
@@ -15,14 +15,14 @@ const LaminaComponent: CreateLaminaElement = (elementConfig = {}) => {
       {
         classnames: [styles.lamina],
       },
-      elementConfig
-    )
+      elementConfig,
+    ),
   ) as unknown as LaminaElement;
 
   let killFocusLoop: (sign: Symbol) => void;
 
   const KillFocusLoopSwitch = Symbol(
-    'Unique sign that denotes the focus event loop was destroyed deliberately.'
+    'Unique sign that denotes the focus event loop was destroyed deliberately.',
   );
 
   (async function focusEventLoop() {

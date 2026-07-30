@@ -1,3 +1,3 @@
 export default function setChildren(element, nodes) {
-    element.append(...nodes);
+  element.append(...nodes);
 }

@@ -1,3 +1,5 @@
+import { describe, expect, jest, test } from '@jest/globals';
+
 jest.mock('./merge.function', () => (arg: any) => arg);
 
 import normalizePageStyles from './normalize-page-styles.function';

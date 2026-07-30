@@ -1,3 +1,5 @@
+import { describe, expect, jest, test } from '@jest/globals';
+
 let mediaQueryBookList: any;
 let mockDestroyMediaQueryListener: any;
 
@@ -13,7 +15,7 @@ jest.mock('../media-query/media-query-listener.factory', () => ({
 
 jest.mock('../../utils/merge.function', () => (arg: any) => arg);
 
-import PagesOutput from '../../models/pages-output.interface';
+import PagesOutput from '../../shared/models/pages-output.interface';
 import BookElement from '../book/book-element.interface';
 import BookComponent from '../book/book.component';
 import BooksComponent from './books.component';
