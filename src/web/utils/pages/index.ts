@@ -23,7 +23,6 @@ export class Pages {
     } else {
       const newPages: Array<string> = [];
       let i = 0;
-
       while (i < difference) {
         if (!this.generator) {
           this.generator = this.parser.generatePages(this.text);

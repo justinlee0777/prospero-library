@@ -1,20 +1,22 @@
-.doublePageAnimating {
-  backface-visibility: hidden;
-  transform-style: preserve-3d;
-}
+@layer prospero-animation {
+  .doublePageAnimating {
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+  }
 
-.doublePageAnimating.leftPage {
-  transform-origin: top right;
-}
+  .doublePageAnimating.leftPage {
+    transform-origin: top right;
+  }
 
-.doublePageAnimating.leftPage.unveiling {
-  transform: rotateY(-180deg);
-}
+  .doublePageAnimating.leftPage.unveiling {
+    transform: rotateY(-180deg);
+  }
 
-.doublePageAnimating.rightPage {
-  transform-origin: top left;
-}
+  .doublePageAnimating.rightPage {
+    transform-origin: top left;
+  }
 
-.doublePageAnimating.rightPage.unveiling {
-  transform: rotateY(180deg);
+  .doublePageAnimating.rightPage.unveiling {
+    transform: rotateY(180deg);
+  }
 }

@@ -15,10 +15,9 @@ export interface PageProps {
 
 export function Page({ page, styles, className }: PageProps) {
   return (
-    <div
-      class={clsx('page', className)}
-      style={{ ...styles }}
-      innerHTML={page.content}
-    />
+    <div class={clsx('page', className)} style={{ ...styles }}>
+      <div innerHTML={page.content}></div>
+      <span class="pageNumber">{page.number + 1}</span>
+    </div>
   );
 }

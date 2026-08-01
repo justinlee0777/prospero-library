@@ -4,6 +4,7 @@ import { turnPageOnClick } from './add-ons/event-listeners/click';
 import { FlexibleBook } from './components/FlexibleBook';
 import { SinglePageBookAnimation } from './add-ons/animations/single-page-animation';
 import { DoublePageBookAnimation } from './add-ons/animations/double-page-animation';
+import { PagePicker } from './components/PagePicker';
 
 const fileUrl = new URL('./text-samples/tempest.txt', import.meta.url);
 
@@ -118,6 +119,18 @@ render(
           config: {
             animation: () => new DoublePageBookAnimation(),
             pagesShown: 2,
+            showPagePicker: true,
+            showBookmark: {
+              storage: {
+                get: () =>
+                  JSON.parse(localStorage.getItem('tempest-bookmark')!),
+                save: (bookmarkData) =>
+                  localStorage.setItem(
+                    'tempest-bookmark',
+                    JSON.stringify(bookmarkData),
+                  ),
+              },
+            },
             pageStyles: {
               'font-family': 'Arial',
               'font-size': '16px',

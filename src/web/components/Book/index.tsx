@@ -1,17 +1,38 @@
 import './Book.css';
 
-import { createEffect, createSignal, JSX } from 'solid-js';
+import {
+  createEffect,
+  createResource,
+  createSignal,
+  JSX,
+  lazy,
+  Show,
+} from 'solid-js';
 
 import { Page, PageContent } from './Page';
 import { Pages } from '../../utils/pages';
 import type { BookEventListener } from '../../add-ons/event-listeners/models';
 import type { BookAnimation } from '../../add-ons/animations/models';
+import { Lamina } from '../Lamina';
+import type { BookmarkStorage } from '../Bookmark';
+
+const PagePicker = lazy(() => import('../PagePicker/lazy'));
+const Bookmark = lazy(() => import('../Bookmark/lazy'));
 
 export interface BaseBookProps {
   containerStyles: JSX.CSSProperties;
   pageStyles: JSX.CSSProperties;
+  /** Number of pages to show. */
   pagesShown: number;
 
+  /** Page to initialize on. */
+  currentPage?: number;
+  /** Show an input that the user can use to change the page directly. */
+  showPagePicker?: boolean;
+  /** Use a bookmark by hooking it to a bookmark storage. */
+  showBookmark?: {
+    storage: BookmarkStorage;
+  };
   animation?: () => BookAnimation;
   events?: {
     onClick?: BookEventListener<MouseEvent>;
@@ -33,11 +54,14 @@ export interface GetPage {
 }
 
 export function Book({
+  currentPage: initialPage,
   pagesShown,
   pageStyles,
   containerStyles,
   events,
   animation,
+  showPagePicker,
+  showBookmark,
   ...remainingProps
 }: BookProps) {
   let resolveSlatePromise: (slate: HTMLDivElement) => void;
@@ -80,20 +104,30 @@ export function Book({
 
   let bookElement: HTMLDivElement;
 
+  let laminaElement: HTMLDivElement;
+
   const bookAnimation = animation?.();
 
-  const [currentPage, setCurrentPage] = createSignal(0);
+  const [bookmarkData, { mutate: mutateBookmarkData }] = createResource(() => {
+    return showBookmark?.storage.get();
+  });
+
+  const [currentPage, setCurrentPage] = createSignal<number | undefined>();
+
+  const activePage = (): number =>
+    currentPage() ?? bookmarkData()?.pageNumber ?? initialPage ?? 0;
 
   const getPages = async (pageNumber: number) => {
-    const pages = await Promise.all(
-      Array(pagesShown)
-        .fill(undefined)
-        .map((_, i) => pageNumber + i)
-        .map(async (number) => ({
-          number,
-          content: await getPage(number),
-        })),
-    );
+    const pages: Array<{ number: number; content: string | null }> = [];
+
+    for (let i = 0; i < pagesShown; i++) {
+      const number = pageNumber + i;
+
+      pages.push({
+        number,
+        content: await getPage(number),
+      });
+    }
 
     if (pages.every((page) => page.content === null)) {
       return false;
@@ -127,7 +161,7 @@ export function Book({
   };
 
   const decrement = async () => {
-    const page = Math.max(currentPage() - pagesShown, 0);
+    const page = Math.max(activePage() - pagesShown, 0);
 
     if (await getPages(page)) {
       setCurrentPage(page);
@@ -135,15 +169,17 @@ export function Book({
   };
 
   const increment = async () => {
-    const page = currentPage() + pagesShown;
+    const page = activePage() + pagesShown;
     if (await getPages(page)) {
       setCurrentPage(page);
     }
   };
 
   createEffect(() => {
-    updatePages(currentPage());
+    updatePages(activePage());
   });
+
+  const stopPropagation = (event: Event) => event.stopPropagation();
 
   const portion = 100 / pagesShown;
 
@@ -192,6 +228,35 @@ export function Book({
           width: `${portion}%`,
         }}
       ></div>
+      <Lamina ref={laminaElement!}>
+        <Show when={showPagePicker}>
+          <PagePicker
+            className="bookPagePicker"
+            onPageChange={(pageNumber) => setCurrentPage(pageNumber - 1)}
+            onClick={stopPropagation}
+          />
+        </Show>
+        <Show when={showBookmark}>
+          {(bookmark) => (
+            <Bookmark
+              className="bookBookmark"
+              savedNumber={() => bookmarkData()?.pageNumber}
+              onClick={async (event) => {
+                event.stopPropagation();
+
+                bookmark().storage.save({
+                  pageNumber: activePage(),
+                });
+
+                mutateBookmarkData({
+                  ...bookmarkData(),
+                  pageNumber: activePage(),
+                });
+              }}
+            />
+          )}
+        </Show>
+      </Lamina>
     </div>
   );
 }

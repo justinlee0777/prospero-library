@@ -1,15 +1,39 @@
-.book {
-  overflow: hidden;
-  position: relative;
-}
+@layer prospero {
+  .book {
+    overflow: hidden;
+    position: relative;
 
-.page,
-.slate {
-  box-sizing: border-box;
-  height: 100%;
-  overflow-y: hidden;
-  position: absolute;
-  top: 0;
-  white-space: pre-wrap;
-  width: 100%;
+    .page,
+    .slate {
+      box-sizing: border-box;
+      height: 100%;
+      overflow-y: hidden;
+      position: absolute;
+      top: 0;
+      white-space: pre-wrap;
+      width: 100%;
+    }
+
+    .page {
+      .pageNumber {
+        bottom: 1em;
+        right: 50%;
+        position: absolute;
+        translate: -50%;
+      }
+    }
+  }
+
+  .bookPagePicker {
+    position: absolute;
+    right: 50%;
+    top: 0.5em;
+    translate: 50%;
+  }
+
+  .bookBookmark {
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+  }
 }

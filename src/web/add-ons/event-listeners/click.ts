@@ -1,4 +1,4 @@
-import type { BookEventListener } from '../../components/Book';
+import { BookEventListener } from './models';
 
 export const turnPageOnClick: BookEventListener<MouseEvent> = ({
   event,
