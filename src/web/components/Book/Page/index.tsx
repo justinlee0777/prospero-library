@@ -1,4 +1,5 @@
 import type { JSX } from 'solid-js/jsx-runtime';
+import clsx from 'clsx';
 
 export interface PageContent {
   number: number;
@@ -8,8 +9,16 @@ export interface PageContent {
 export interface PageProps {
   page: PageContent;
   styles: JSX.CSSProperties;
+
+  className?: string;
 }
 
-export function Page({ page, styles }: PageProps) {
-  return <div class="page" style={{ ...styles }} innerHTML={page.content} />;
+export function Page({ page, styles, className }: PageProps) {
+  return (
+    <div
+      class={clsx('page', className)}
+      style={{ ...styles }}
+      innerHTML={page.content}
+    />
+  );
 }

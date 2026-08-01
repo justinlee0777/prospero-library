@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "clsx": "^2.1.1",
     "picture-in-picture-js": "^0.2.1",
     "solid-js": "^1.9.14"
   },

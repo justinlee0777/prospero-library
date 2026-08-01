@@ -2,6 +2,8 @@ import { render } from 'solid-js/web';
 
 import { turnPageOnClick } from './add-ons/event-listeners/click';
 import { FlexibleBook } from './components/FlexibleBook';
+import { SinglePageBookAnimation } from './add-ons/animations/single-page-animation';
+import { DoublePageBookAnimation } from './add-ons/animations/double-page-animation';
 
 const fileUrl = new URL('./text-samples/tempest.txt', import.meta.url);
 
@@ -93,6 +95,7 @@ render(
       text={text}
       mediaQueryList={[
         {
+          animation: () => new SinglePageBookAnimation(),
           pagesShown: 1,
           pageStyles: {
             'font-family': 'Arial',
@@ -113,6 +116,7 @@ render(
         {
           pattern: { minWidth: 800 },
           config: {
+            animation: () => new DoublePageBookAnimation(),
             pagesShown: 2,
             pageStyles: {
               'font-family': 'Arial',

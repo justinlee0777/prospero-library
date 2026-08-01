@@ -3,22 +3,16 @@ import './Book.css';
 import { createEffect, createSignal, JSX } from 'solid-js';
 
 import { Page, PageContent } from './Page';
-import { Pages } from '../../utils/pages/pages';
-
-export interface BookEventListener<EventType extends Event> {
-  (args: {
-    event: EventType;
-    increment: () => void;
-    decrement: () => void;
-    bookElement: HTMLDivElement;
-  }): void;
-}
+import { Pages } from '../../utils/pages';
+import type { BookEventListener } from '../../add-ons/event-listeners/models';
+import type { BookAnimation } from '../../add-ons/animations/models';
 
 export interface BaseBookProps {
   containerStyles: JSX.CSSProperties;
   pageStyles: JSX.CSSProperties;
   pagesShown: number;
 
+  animation?: () => BookAnimation;
   events?: {
     onClick?: BookEventListener<MouseEvent>;
   };
@@ -43,6 +37,7 @@ export function Book({
   pageStyles,
   containerStyles,
   events,
+  animation,
   ...remainingProps
 }: BookProps) {
   let resolveSlatePromise: (slate: HTMLDivElement) => void;
@@ -50,6 +45,9 @@ export function Book({
   const slatePromise = new Promise<HTMLDivElement>((resolve) => {
     resolveSlatePromise = resolve;
   });
+
+  // Used specifically for animations.
+  const [underPages, setUnderPages] = createSignal<Array<PageContent>>([]);
 
   const [renderedPages, setRenderedPages] = createSignal<Array<PageContent>>(
     [],
@@ -82,6 +80,8 @@ export function Book({
 
   let bookElement: HTMLDivElement;
 
+  const bookAnimation = animation?.();
+
   const [currentPage, setCurrentPage] = createSignal(0);
 
   const getPages = async (pageNumber: number) => {
@@ -102,14 +102,29 @@ export function Book({
     }
   };
 
-  const updatePages = (pageNumber: number) =>
-    getPages(pageNumber).then((pages) => {
-      if (pages) {
-        setRenderedPages(pages);
-      } else {
-        // TODO: handle
-      }
-    });
+  const updatePages = async (pageNumber: number) => {
+    const pages = await getPages(pageNumber);
+    if (pages) {
+      setUnderPages(pages);
+
+      await bookAnimation?.changePage(
+        pageNumber,
+        [
+          ...bookElement!.querySelectorAll('.page:not(.underPage)'),
+        ] as Array<HTMLElement>,
+        [
+          ...bookElement!.querySelectorAll('.page.underPage'),
+        ] as Array<HTMLElement>,
+      );
+
+      setRenderedPages(pages);
+      setUnderPages([]);
+    } else if (pageNumber !== 0) {
+      await updatePages(0);
+    } else {
+      // Else ... show nothing. It's the client's fault.
+    }
+  };
 
   const decrement = async () => {
     const page = Math.max(currentPage() - pagesShown, 0);
@@ -132,6 +147,24 @@ export function Book({
 
   const portion = 100 / pagesShown;
 
+  const renderPageFn =
+    (className?: string) => (page: PageContent, i: number) => {
+      return (
+        <Page
+          className={className}
+          page={page}
+          styles={{
+            ...pageStyles,
+            left: `${portion * i}%`,
+            width: `${portion}%`,
+          }}
+        />
+      );
+    };
+
+  const renderPage = renderPageFn();
+  const renderUnderPage = renderPageFn('underPage');
+
   return (
     <div
       class="book"
@@ -146,18 +179,8 @@ export function Book({
         })
       }
     >
-      {renderedPages().map((page, i) => {
-        return (
-          <Page
-            page={page}
-            styles={{
-              ...pageStyles,
-              left: `${portion * i}%`,
-              width: `${portion}%`,
-            }}
-          />
-        );
-      })}
+      {underPages().map(renderUnderPage)}
+      {renderedPages().map(renderPage)}
       <div
         class="slate"
         ref={(element) => resolveSlatePromise(element)}
