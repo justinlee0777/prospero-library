@@ -1,0 +1,15 @@
+.book {
+  overflow: hidden;
+  position: relative;
+}
+
+.page,
+.slate {
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: hidden;
+  position: absolute;
+  top: 0;
+  white-space: pre-wrap;
+  width: 100%;
+}

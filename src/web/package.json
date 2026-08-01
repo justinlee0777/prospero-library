@@ -2,20 +2,25 @@
   "name": "web",
   "version": "1.0.0",
   "description": "",
+  "targets": {
+    "main": false
+  },
   "scripts": {
-    "serve": "rm -rf .parcel-cache && parcel index.html",
+    "serve": "vite",
     "build": "tsc --build"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "picture-in-picture-js": "^0.2.1"
+    "picture-in-picture-js": "^0.2.1",
+    "solid-js": "^1.9.14"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^26.1.2",
     "jest": "^30.4.2",
-    "parcel": "^2.16.4",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vite": "^8.2.0",
+    "vite-plugin-solid": "^2.11.14"
   }
 }
