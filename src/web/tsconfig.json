@@ -1,17 +1,21 @@
 {
   "compilerOptions": {
-    "rootDir": "..",
+    "rootDir": ".",
     "outDir": "../../dist",
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "bundler",
+    "composite": true,
     "declaration": true,
     "declarationMap": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["node"]
+    "paths": {
+      "@prospero/shared": ["../shared"]
+    }
   },
-  "include": ["./**/*", "../shared/**/*"],
-  "exclude": ["./**/*.spec.ts", "samples"]
+  "include": ["./**/*"],
+  "exclude": ["./**/*.spec.ts"],
+  "references": [{ "path": "../shared" }]
 }

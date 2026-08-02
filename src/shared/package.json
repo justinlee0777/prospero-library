@@ -1,15 +1,15 @@
 {
-  "name": "shared",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "@prospero/shared",
+  "version": "2.0.0",
+  "type": "module",
+  "types": "./index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "vite build"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/jest": "^30.0.0",
-    "jest": "^30.4.2"
+    "vite": "^8.2.0",
+    "vite-plugin-dts": "^5.0.3"
   }
 }

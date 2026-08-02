@@ -3,7 +3,14 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "declaration": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "composite": true,
+    "paths": {
+      "@prospero/web": ["../web"],
+      "@prospero/shared": ["../shared"]
+    },
+    "types": ["node"]
   },
-  "include": ["./**/*"]
+  "include": ["./**/*"],
+  "references": [{ "path": "../web" }, { "path": "../shared" }]
 }

@@ -1,6 +1,12 @@
+import type {
+  IPages,
+  PagesOutput,
+  PagesAsIndicesOutput,
+} from '@prospero/shared';
+
 import { HTMLParser } from '../html-parser';
 
-export class Pages {
+export class Pages implements IPages {
   private parser: HTMLParser;
   private cachedPages: Array<string> = [];
   private generator: AsyncGenerator<string> | undefined;
@@ -13,7 +19,7 @@ export class Pages {
     this.parser = new HTMLParser(slate);
   }
 
-  async get(pageNumber: number) {
+  async get(pageNumber: number): Promise<string | null> {
     const difference = pageNumber - (this.cachedPages.length - 1);
 
     if (difference < 0) {
@@ -42,5 +48,45 @@ export class Pages {
 
       return this.cachedPages[pageNumber] || null;
     }
+  }
+
+  async getAll(): Promise<Array<string>> {
+    const pages: Array<string> = [];
+
+    const generator = this.parser.generatePages(this.text);
+
+    for await (const page of generator) {
+      pages.push(page);
+    }
+
+    return pages;
+  }
+
+  async getData(): Promise<PagesOutput> {
+    return {
+      pages: await this.getAll(),
+    };
+  }
+
+  async getDataAsIndices(): Promise<PagesAsIndicesOutput> {
+    const stringPages = await this.getAll();
+
+    let text = '';
+    let pages: PagesAsIndicesOutput['pages'] = [];
+
+    let index = 0;
+
+    stringPages.forEach((page) => {
+      text += page;
+      pages.push({
+        beginIndex: index,
+        endIndex: (index += page.length),
+      });
+    });
+
+    return {
+      text,
+      pages,
+    };
   }
 }

@@ -1,4 +1,4 @@
-import debounce from '../../../shared/utils/debounce.function';
+import debounce from 'lodash-es/debounce';
 
 type MediaQueryListener = () => void;
 
@@ -65,7 +65,7 @@ export class MediaQueryListenerFactory {
       }
     };
 
-    const debouncedResize = debounce(resize);
+    const debouncedResize = debounce(resize, 300);
 
     window.addEventListener('resize', debouncedResize, {
       passive: true,

@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["build.consts.ts", "vite.config.ts", "post-vite.ts"]
+}
