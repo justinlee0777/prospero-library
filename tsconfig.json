@@ -1,7 +1,15 @@
 {
   "compilerOptions": {
-    "types": ["node"]
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "types": ["node"],
+    "paths": {
+      "@prospero/web": ["./src/web/index.ts"],
+      "@prospero/web/*": ["./src/web/*"],
+      "@prospero/shared": ["./src/shared/index.ts"],
+      "@prospero/server": ["./src/server/index.ts"]
+    }
   },
-  "files": [],
-  "references": [{ "path": "./src/web" }, { "path": "./src/server" }]
+  "references": [{ "path": "./src/web" }, { "path": "./src/server" }],
+  "include": ["demos", "globals.d.ts"]
 }

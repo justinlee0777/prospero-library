@@ -3,6 +3,10 @@
     overflow: hidden;
     position: relative;
 
+    &.bookHidden {
+      display: none;
+    }
+
     .page,
     .slate {
       box-sizing: border-box;
@@ -11,7 +15,6 @@
       position: absolute;
       top: 0;
       white-space: pre-wrap;
-      width: 100%;
     }
 
     .page {

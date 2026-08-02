@@ -8,6 +8,7 @@ import {
   lazy,
   Show,
 } from 'solid-js';
+import clsx from 'clsx';
 
 import { Page, PageContent } from './Page';
 import { Pages } from '../../utils/pages';
@@ -25,6 +26,8 @@ export interface BaseBookProps {
   /** Number of pages to show. */
   pagesShown: number;
 
+  /** Not removing the element, but hiding it from the UI with aria attributes */
+  hide?: boolean;
   /** Page to initialize on. */
   currentPage?: number;
   /** Show an input that the user can use to change the page directly. */
@@ -62,6 +65,7 @@ export function Book({
   animation,
   showPagePicker,
   showBookmark,
+  hide,
   ...remainingProps
 }: BookProps) {
   let resolveSlatePromise: (slate: HTMLDivElement) => void;
@@ -203,8 +207,9 @@ export function Book({
 
   return (
     <div
-      class="book"
+      class={clsx('book', { bookHidden: hide })}
       ref={bookElement!}
+      aria-hidden={hide}
       style={{ ...containerStyles }}
       onClick={(event) =>
         events?.onClick?.({

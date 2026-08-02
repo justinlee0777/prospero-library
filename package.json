@@ -1,6 +1,7 @@
 {
   "name": "prospero",
   "version": "2.0.0",
+  "type": "module",
   "author": "Justin Lee",
   "private": true,
   "workspaces": [
@@ -11,12 +12,15 @@
   "description": "",
   "license": "ISC",
   "scripts": {
+    "serve": "vite",
     "build": "rm -rf dist && npm run build --workspaces && tsx post-build.ts",
     "format": "prettier -w ."
   },
   "devDependencies": {
     "@types/node": "^26.1.2",
     "prettier": "^3.9.6",
-    "tsx": "^4.23.1"
+    "tsx": "^4.23.1",
+    "vite": "^8.2.0",
+    "vite-plugin-solid": "^2.11.14"
   }
 }

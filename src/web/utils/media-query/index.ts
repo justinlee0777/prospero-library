@@ -27,6 +27,7 @@ export class MediaQueryListenerFactory {
    * @returns a function that destroys the listeners.
    */
   static create(
+    container: HTMLElement,
     fallback: Pick<MediaQueryListenerConfig, 'show' | 'hide'>,
     ...configs: Array<MediaQueryListenerConfig>
   ): () => void {
@@ -67,13 +68,11 @@ export class MediaQueryListenerFactory {
 
     const debouncedResize = debounce(resize, 300);
 
-    window.addEventListener('resize', debouncedResize, {
-      passive: true,
-    });
+    const resizeObserver = new ResizeObserver(debouncedResize);
 
-    resize();
+    resizeObserver.observe(container, { box: 'border-box' });
 
-    return () => window.removeEventListener('resize', debouncedResize);
+    return () => resizeObserver.disconnect();
   }
 
   /**

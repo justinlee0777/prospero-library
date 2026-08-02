@@ -5,7 +5,7 @@ import playwright from 'playwright';
 import type { BaseBookProps } from '@prospero/web';
 import { IPages, PagesAsIndicesOutput, PagesOutput } from '@prospero/shared';
 
-type BookStyles = Pick<BaseBookProps, 'containerStyles' | 'pageStyles'>;
+export type BookStyles = Pick<BaseBookProps, 'containerStyles' | 'pageStyles'>;
 
 /**
  * This is like the most fragile file in the whole library, huh.
@@ -14,7 +14,7 @@ type BookStyles = Pick<BaseBookProps, 'containerStyles' | 'pageStyles'>;
  */
 export class Pages implements IPages {
   private readonly port = 3000;
-  private readonly prod = false;
+  private readonly prod = import.meta.env.PROD;
 
   private readonly mimeTypes: Map<string, string> = new Map([
     ['.html', 'text/html'],
@@ -55,7 +55,6 @@ export class Pages implements IPages {
   ): Promise<ReturnType> {
     const server = http.createServer(
       async (req: http.IncomingMessage, res: http.ServerResponse) => {
-        // Safe path resolution
         const reqUrl = req.url || '/';
         const filePath: string = path.join(
           this.webDir,
@@ -157,7 +156,9 @@ export class Pages implements IPages {
 
         const pages = new Pages(slate, text);
 
-        return pages[method](...params);
+        const data = pages[method](...params);
+
+        return data;
       },
       pageData,
     );
@@ -171,27 +172,3 @@ export class Pages implements IPages {
     return result;
   }
 }
-
-const text = await readFile(
-  path.resolve(
-    import.meta.dirname,
-    '../../../web/demos/text-samples/tempest.txt',
-  ),
-  { encoding: 'utf-8' },
-);
-
-const bookStyles: BookStyles = {
-  pageStyles: {
-    'font-family': 'Arial',
-    'font-size': '16px',
-    'line-height': '2',
-    padding: '2em 1em',
-  },
-  containerStyles: {
-    width: '375px',
-    height: '667px',
-    padding: '24px',
-  },
-};
-
-console.log(await new Pages(text, bookStyles).getAll());
