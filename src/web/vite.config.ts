@@ -5,8 +5,6 @@ import { resolve } from 'path';
 
 import { outDir } from './build.consts.js';
 
-// TODO: export themes
-
 export default defineConfig({
   plugins: [solidPlugin(), dts({ tsconfigPath: './tsconfig.prod.json' })],
   server: {

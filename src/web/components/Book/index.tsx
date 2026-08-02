@@ -16,6 +16,7 @@ import type { BookEventListener } from '../../add-ons/event-listeners/models';
 import type { BookAnimation } from '../../add-ons/animations/models';
 import { Lamina } from '../Lamina';
 import type { BookmarkStorage } from '../Bookmark';
+import { LoadingIcon } from '../LoadingIcon';
 
 const PagePicker = lazy(() => import('../PagePicker/lazy'));
 const Bookmark = lazy(() => import('../Bookmark/lazy'));
@@ -39,6 +40,7 @@ export interface BaseBookProps {
   animation?: () => BookAnimation;
   events?: {
     onClick?: BookEventListener<MouseEvent>;
+    onKeyDown?: BookEventListener<KeyboardEvent>;
   };
 }
 
@@ -50,7 +52,12 @@ export interface BookPropsWithText extends BaseBookProps {
   text: string;
 }
 
-export type BookProps = BookPropsWithPages | BookPropsWithText;
+export interface BookPropsWithGetPage extends BaseBookProps {
+  getPage: (pageNumber: number) => Promise<string | null>;
+}
+
+export type BookProps =
+  BookPropsWithPages | BookPropsWithText | BookPropsWithGetPage;
 
 export interface GetPage {
   (pageNumber: number): Promise<string | null> | string | null;
@@ -98,12 +105,14 @@ export function Book({
         return remainingProps.pages[pageNumber];
       }
     });
-  } else {
+  } else if ('text' in remainingProps) {
     slatePromise.then((slateElement) => {
       const pages = new Pages(slateElement, remainingProps.text);
 
       resolveGetPagePromise(pages.get.bind(pages));
     });
+  } else {
+    resolveGetPagePromise!(remainingProps.getPage);
   }
 
   let bookElement: HTMLDivElement;
@@ -140,13 +149,18 @@ export function Book({
     }
   };
 
-  const updatePages = async (pageNumber: number) => {
-    const pages = await getPages(pageNumber);
-    if (pages) {
-      setUnderPages(pages);
+  const [pages] = createResource(activePage, async (pageNumber) => {
+    return getPages(pageNumber);
+  });
+
+  createEffect(async () => {
+    const pagesValue = pages();
+
+    if (Array.isArray(pagesValue)) {
+      setUnderPages(pagesValue);
 
       await bookAnimation?.changePage(
-        pageNumber,
+        activePage(),
         [
           ...bookElement!.querySelectorAll('.page:not(.underPage)'),
         ] as Array<HTMLElement>,
@@ -155,14 +169,14 @@ export function Book({
         ] as Array<HTMLElement>,
       );
 
-      setRenderedPages(pages);
+      setRenderedPages(pagesValue);
       setUnderPages([]);
-    } else if (pageNumber !== 0) {
-      await updatePages(0);
+    } else if (activePage() !== 0) {
+      setCurrentPage(0);
     } else {
       // Else ... show nothing. It's the client's fault.
     }
-  };
+  });
 
   const decrement = async () => {
     const page = Math.max(activePage() - pagesShown, 0);
@@ -178,10 +192,6 @@ export function Book({
       setCurrentPage(page);
     }
   };
-
-  createEffect(() => {
-    updatePages(activePage());
-  });
 
   const stopPropagation = (event: Event) => event.stopPropagation();
 
@@ -207,12 +217,21 @@ export function Book({
 
   return (
     <div
+      tabIndex={0}
       class={clsx('book', { bookHidden: hide })}
       ref={bookElement!}
       aria-hidden={hide}
       style={{ ...containerStyles }}
       onClick={(event) =>
         events?.onClick?.({
+          event,
+          increment,
+          decrement,
+          bookElement: bookElement!,
+        })
+      }
+      onKeyDown={(event) =>
+        events?.onKeyDown?.({
           event,
           increment,
           decrement,
@@ -260,6 +279,9 @@ export function Book({
               }}
             />
           )}
+        </Show>
+        <Show when={pages.loading}>
+          <LoadingIcon className="bookLoadingIcon" />
         </Show>
       </Lamina>
     </div>

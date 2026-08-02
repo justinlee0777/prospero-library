@@ -1,4 +1,4 @@
-import '../../src/web/add-ons/themes/BookTheme.css';
+import '../../src/web/public/themes/BookTheme.css';
 
 import { render } from 'solid-js/web';
 

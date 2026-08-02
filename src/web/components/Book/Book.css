@@ -39,4 +39,10 @@
     right: 0.5em;
     top: 0.5em;
   }
+
+  .bookLoadingIcon {
+    position: absolute;
+    right: 1em;
+    top: 1em;
+  }
 }

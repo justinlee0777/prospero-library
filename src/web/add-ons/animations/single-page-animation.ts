@@ -19,7 +19,6 @@ export class SinglePageBookAnimation implements BookAnimation {
     pageNumber: number,
     oldPages: Array<HTMLElement>,
   ): Promise<void> {
-    console.log('call', oldPages);
     const animatingClass = 'singlePageAnimating';
 
     // Initial state of the animated page.
@@ -48,7 +47,6 @@ export class SinglePageBookAnimation implements BookAnimation {
     await Promise.all(
       oldPages.map((page) => {
         page.classList.add(animatingClass);
-        console.log('animating...', page, this.milliseconds, transform);
         return page.animate({ transform }, this.milliseconds).finished;
       }),
     );

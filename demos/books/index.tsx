@@ -1,7 +1,7 @@
-import '../../src/web/add-ons/themes/BookTheme.css';
+import '../../src/web/public/themes/BookTheme.css';
 
 import { render } from 'solid-js/web';
-import { Books, turnPageOnClick } from '@prospero/web';
+import { Books, changeOnArrowKeys, turnPageOnClick } from '@prospero/web';
 
 import { bookStyles, desktopStyles } from './book-styles.const';
 
@@ -24,7 +24,10 @@ render(
           config: {
             pages: json,
             pagesShown: 2,
-            events: { onClick: turnPageOnClick },
+            events: {
+              onClick: turnPageOnClick,
+              onKeyDown: changeOnArrowKeys,
+            },
             ...desktopStyles,
           },
           media: {
