@@ -2,10 +2,10 @@ import { createEffect, createSignal, onCleanup } from 'solid-js';
 import {
   MediaQueryListenerFactory,
   MediaQueryPattern,
-} from '../../utils/media-query';
-import { Book, BookProps } from '../Book';
+} from '../../utils/media-query/index.js';
+import { Book, BookProps } from '../Book/index.jsx';
 
-export interface Props {
+export interface BooksProps {
   books: [
     BookProps,
     ...Array<{
@@ -15,7 +15,7 @@ export interface Props {
   ];
 }
 
-export function Books({ books }: Props) {
+export function Books({ books }: BooksProps) {
   let booksElement: HTMLDivElement;
 
   const [bookIndex, setBookIndex] = createSignal<number>();

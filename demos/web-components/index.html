@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Prospero - Web Components</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        margin: 0;
+        overflow: auto;
+
+        & > header {
+          flex: 0;
+        }
+
+        & > main {
+          flex: 1;
+          min-height: 0;
+        }
+
+        .book {
+          margin: auto;
+        }
+      }
+    </style>
+    <script type="module" src="./index.ts"></script>
+  </head>
+  <body>
+    <header><h1>Prospero - Web Components</h1></header>
+    <main id="root"></main>
+  </body>
+</html>

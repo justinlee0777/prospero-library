@@ -1,6 +1,6 @@
 import './double-page-animation.css';
 
-import { BookAnimation } from './models';
+import { BookAnimation } from './models.js';
 
 interface Config {
   milliseconds: number;

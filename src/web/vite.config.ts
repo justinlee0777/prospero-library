@@ -2,8 +2,22 @@ import { defineConfig } from 'vite';
 import solidPlugin from 'vite-plugin-solid';
 import dts from 'vite-plugin-dts';
 import { resolve } from 'path';
+import { readFile } from 'fs/promises';
 
 import { outDir } from './build.consts.js';
+
+const pkg = JSON.parse(await readFile('./package.json', { encoding: 'utf-8' }));
+
+const externalPackages = [
+  ...Object.keys(pkg.dependencies || {}),
+  ...Object.keys(pkg.peerDependencies || {}),
+];
+
+const external = [
+  ...externalPackages.map(
+    (packageName) => new RegExp(`^${packageName}(\/.*)?`),
+  ),
+];
 
 export default defineConfig({
   plugins: [solidPlugin(), dts({ tsconfigPath: './tsconfig.prod.json' })],
@@ -29,7 +43,7 @@ export default defineConfig({
           import.meta.dirname,
           './add-ons/event-listeners.ts',
         ),
-        components: resolve(import.meta.dirname, './components.ts'),
+        components: resolve(import.meta.dirname, './components.tsx'),
         utils: resolve(import.meta.dirname, './utils.ts'),
       },
       // Output as modern ES Modules
@@ -38,6 +52,7 @@ export default defineConfig({
       fileName: (format, entryName) => `${entryName}.js`,
     },
     rolldownOptions: {
+      external,
       output: {
         preserveModules: true,
         preserveModulesRoot: '.',

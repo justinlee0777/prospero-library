@@ -1,4 +1,4 @@
-import { BookAnimation } from './models';
+import { BookAnimation } from './models.js';
 
 interface Config {
   milliseconds: number;

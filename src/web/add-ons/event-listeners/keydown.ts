@@ -1,4 +1,4 @@
-import { BookEventListener } from './models';
+import { BookEventListener } from './models.js';
 
 /**
  * @returns a no-args function that destroys the listener.

@@ -1,3 +1,3 @@
-import { PagePicker } from './index';
+import { PagePicker } from './index.jsx';
 
 export default PagePicker;

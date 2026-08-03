@@ -1,5 +1,5 @@
-import { HTMLTokenizer } from '../html-tokenizer';
-import { TokenType } from '../html-tokens';
+import { HTMLTokenizer } from '../html-tokenizer/index.js';
+import { TokenType } from '../html-tokens.js';
 
 export interface ParserContext {
   /**

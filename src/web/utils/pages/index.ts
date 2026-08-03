@@ -4,7 +4,7 @@ import type {
   PagesAsIndicesOutput,
 } from '@prospero/shared/models';
 
-import { HTMLParser } from '../html-parser';
+import { HTMLParser } from '../html-parser/index.js';
 
 export class Pages implements IPages {
   private parser: HTMLParser;

@@ -4,35 +4,36 @@ import {
   createEffect,
   createResource,
   createSignal,
-  JSX,
   lazy,
   Show,
 } from 'solid-js';
 import clsx from 'clsx';
 
-import { Page, PageContent } from './Page';
-import { Pages } from '../../utils/pages';
-import { Lamina } from '../Lamina';
-import { LoadingIcon } from '../LoadingIcon';
-import { BookProps, GetPage } from './models';
+import { Page, PageContent } from './Page/index.jsx';
+import { Pages } from '../../utils/pages/index.js';
+import { Lamina } from '../Lamina/index.jsx';
+import { LoadingIcon } from '../LoadingIcon/index.jsx';
+import { BookProps, GetPage } from './models.js';
 
-const PagePicker = lazy(() => import('../PagePicker/lazy'));
-const Bookmark = lazy(() => import('../Bookmark/lazy'));
+const PagePicker = lazy(() => import('../PagePicker/lazy.js'));
+const Bookmark = lazy(() => import('../Bookmark/lazy.js'));
 
-export * from './models';
+export * from './models.js';
 
-export function Book({
-  currentPage: initialPage,
-  pagesShown,
-  pageStyles,
-  containerStyles,
-  events,
-  animation,
-  showPagePicker,
-  showBookmark,
-  hide,
-  ...remainingProps
-}: BookProps) {
+// TODO: Table of Contents
+export function Book(props: BookProps) {
+  const {
+    currentPage: initialPage,
+    pagesShown,
+    pageStyles,
+    containerStyles,
+    events,
+    animation,
+    showPagePicker,
+    showBookmark,
+    hide,
+  } = props;
+
   let resolveSlatePromise: (slate: HTMLDivElement) => void;
 
   const slatePromise = new Promise<HTMLDivElement>((resolve) => {
@@ -55,22 +56,22 @@ export function Book({
   const getPage: GetPage = async (pageNumber: number) =>
     getPagePromise.then((getPageFn) => getPageFn(pageNumber));
 
-  if ('pages' in remainingProps) {
+  if ('pages' in props) {
     resolveGetPagePromise!((pageNumber) => {
-      if (pageNumber < 0 || pageNumber >= remainingProps.pages.length) {
+      if (pageNumber < 0 || pageNumber >= props.pages.length) {
         return null;
       } else {
-        return remainingProps.pages[pageNumber];
+        return props.pages[pageNumber];
       }
     });
-  } else if ('text' in remainingProps) {
+  } else if ('text' in props) {
     slatePromise.then((slateElement) => {
-      const pages = new Pages(slateElement, remainingProps.text);
+      const pages = new Pages(slateElement, props.text);
 
       resolveGetPagePromise(pages.get.bind(pages));
     });
   } else {
-    resolveGetPagePromise!(remainingProps.getPage);
+    resolveGetPagePromise!(props.getPage);
   }
 
   let bookElement: HTMLDivElement;
@@ -117,6 +118,8 @@ export function Book({
     if (Array.isArray(pagesValue)) {
       setUnderPages(pagesValue);
 
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
       await bookAnimation?.changePage(
         activePage(),
         [
@@ -129,8 +132,6 @@ export function Book({
 
       setRenderedPages(pagesValue);
       setUnderPages([]);
-    } else if (activePage() !== 0) {
-      setCurrentPage(0);
     } else {
       // Else ... show nothing. It's the client's fault.
     }

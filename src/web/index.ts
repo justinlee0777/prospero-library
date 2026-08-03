@@ -1,7 +1,7 @@
-export * from './add-ons/animations';
+export * from './add-ons/animations.js';
 
-export * from './add-ons/event-listeners';
+export * from './add-ons/event-listeners.js';
 
-export * from './components';
+export * from './components.jsx';
 
-export * from './utils';
+export * from './utils.js';

@@ -1,4 +1,4 @@
-import { Token, TokenType } from '../html-tokens';
+import { Token, TokenType } from '../html-tokens.js';
 
 interface Config {
   footnotes?: string;

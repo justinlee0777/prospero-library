@@ -1,13 +1,13 @@
-import '../../src/web/public/themes/BookTheme.css';
+import '../../src/web/styles/themes/BookTheme.css';
 
 import { render } from 'solid-js/web';
 
-import { FlexibleBook } from '@prospero/web/components';
+import { FlexibleBook } from '../../src/web/components';
 import {
   DoublePageBookAnimation,
   SinglePageBookAnimation,
-} from '@prospero/web/add-ons/animations';
-import { turnPageOnClick } from '@prospero/web/add-ons/event-listeners';
+} from '../../src/web/add-ons/animations';
+import { turnPageOnClick } from '../../src/web/add-ons/event-listeners';
 
 const fileUrl = new URL('../text-samples/tempest.txt', import.meta.url);
 
@@ -17,13 +17,6 @@ const text = await response.text();
 render(
   () => (
     <FlexibleBook
-      /*
-      pages={[
-        'Foo',
-        'Bar',
-        'Baz',
-      ]}
-        */
       text={text}
       mediaQueryList={[
         {

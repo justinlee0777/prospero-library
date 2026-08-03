@@ -1,7 +1,7 @@
 import type { JSX } from 'solid-js/jsx-runtime';
-import type { BookAnimation } from '../../add-ons/animations';
-import type { BookEventListener } from '../../add-ons/event-listeners';
-import type { BookmarkStorage } from '../Bookmark';
+import type { BookAnimation } from '../../add-ons/animations.js';
+import type { BookEventListener } from '../../add-ons/event-listeners.js';
+import type { BookmarkStorage } from '../Bookmark/index.jsx';
 
 export interface BaseBookProps {
   containerStyles: JSX.CSSProperties;

@@ -3,38 +3,39 @@ import { createEffect, createSignal, onCleanup, Show } from 'solid-js';
 import {
   MediaQueryListenerFactory,
   MediaQueryPattern,
-} from '../../utils/media-query';
-import { BaseBookProps, Book } from '../Book';
-import { MediaQuerySizerConfig } from '../../utils/media-query';
+} from '../../utils/media-query/index.js';
+import { BaseBookProps, Book } from '../Book/index.jsx';
+import { MediaQuerySizerConfig } from '../../utils/media-query/index.js';
 
-interface FlexibleBookPropsWithSingleConfig {
+export interface FlexibleBookPropsWithSingleConfig {
   config: BaseBookProps;
 }
 
-interface FlexibleBookMediaQuery {
+export interface FlexibleBookMediaQuery {
   config: BaseBookProps;
   pattern: MediaQueryPattern;
 }
 
-interface FlexibleBookPropsWithMediaQueryList {
+export interface FlexibleBookPropsWithMediaQueryList {
   mediaQueryList: [BaseBookProps, ...Array<FlexibleBookMediaQuery>];
 }
 
-type FlexibleBookProps = (
+export type FlexibleBookProps = (
   FlexibleBookPropsWithSingleConfig | FlexibleBookPropsWithMediaQueryList
 ) & {
   text: string;
 };
 
-export function FlexibleBook({ text, ...remainingProps }: FlexibleBookProps) {
+export function FlexibleBook(props: FlexibleBookProps) {
+  const { text } = props;
   let fallback: BaseBookProps;
   let mediaQueryList: Array<FlexibleBookMediaQuery & { matches: boolean }> = [];
 
   let flexibleBookElement: HTMLDivElement;
 
-  if ('mediaQueryList' in remainingProps) {
-    fallback = remainingProps.mediaQueryList[0];
-    const [, ...configs] = [...remainingProps.mediaQueryList];
+  if ('mediaQueryList' in props) {
+    fallback = props.mediaQueryList[0];
+    const [, ...configs] = [...props.mediaQueryList];
     mediaQueryList = configs
       .sort(
         (queryA, queryB) => queryB.pattern.minWidth - queryA.pattern.minWidth,
@@ -52,7 +53,7 @@ export function FlexibleBook({ text, ...remainingProps }: FlexibleBookProps) {
         };
       });
   } else {
-    fallback = remainingProps.config;
+    fallback = props.config;
   }
 
   const [bookConfig, setBookConfig] = createSignal<BaseBookProps>();

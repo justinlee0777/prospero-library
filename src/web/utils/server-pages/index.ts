@@ -4,7 +4,7 @@ import {
   PagesOutput,
 } from '@prospero/shared/models';
 
-import { BaseBookProps } from '../../components/Book';
+import type { BaseBookProps } from '../../components/Book/index.jsx';
 
 export type BookStyles = Pick<BaseBookProps, 'containerStyles' | 'pageStyles'>;
 

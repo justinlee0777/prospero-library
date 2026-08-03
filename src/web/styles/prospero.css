@@ -1,0 +1,13 @@
+/** Useful for getting all the CSS you might need. Good for web components, which does not package styles. */
+
+@import url('../add-ons/animations/double-page-animation.css');
+
+@import url('../components/Book/Book.css');
+
+@import url('../components/Bookmark/Bookmark.css');
+
+@import url('../components/Lamina/Lamina.css');
+
+@import url('../components/LoadingIcon/LoadingIcon.css');
+
+@import url('../components/PagePicker/PagePicker.css');

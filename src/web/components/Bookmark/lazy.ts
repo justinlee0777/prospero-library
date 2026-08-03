@@ -1,3 +1,3 @@
-import { Bookmark } from './index';
+import { Bookmark } from './index.jsx';
 
 export default Bookmark;

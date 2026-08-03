@@ -1,30 +1,57 @@
 {
   "name": "@prospero/web",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "type": "module",
   "description": "",
-  "targets": {
-    "main": false
-  },
   "exports": {
-    "add-ons/animations": {
+    "./styles/*.css": "./styles/*.css",
+    "./prospero.css": "./prospero.css",
+    "./add-ons/animations": {
       "import": "./add-ons/animations.js",
       "require": "./add-ons/animations.js",
+      "default": "./add-ons/animations.js",
       "types": "./add-ons/animations.d.ts"
     },
-    "add-ons/event-listeners": {
+    "./add-ons/animations.js": {
+      "import": "./add-ons/animations.js",
+      "require": "./add-ons/animations.js",
+      "default": "./add-ons/animations.js",
+      "types": "./add-ons/animations.d.ts"
+    },
+    "./add-ons/event-listeners": {
       "import": "./add-ons/event-listeners.js",
       "require": "./add-ons/event-listeners.js",
+      "default": "./add-ons/event-listeners.js",
       "types": "./add-ons/event-listeners.d.ts"
     },
-    "components": {
+    "./add-ons/event-listeners.js": {
+      "import": "./add-ons/event-listeners.js",
+      "require": "./add-ons/event-listeners.js",
+      "default": "./add-ons/event-listeners.js",
+      "types": "./add-ons/event-listeners.d.ts"
+    },
+    "./components": {
       "import": "./components.js",
       "require": "./components.js",
+      "default": "./components.js",
       "types": "./components.d.ts"
     },
-    "utils": {
+    "./components.js": {
+      "import": "./components.js",
+      "require": "./components.js",
+      "default": "./components.js",
+      "types": "./components.d.ts"
+    },
+    "./utils": {
       "import": "./utils.js",
       "require": "./utils.js",
+      "default": "./utils.js",
+      "types": "./utils.d.ts"
+    },
+    "./utils.js": {
+      "import": "./utils.js",
+      "require": "./utils.js",
+      "default": "./utils.js",
       "types": "./utils.d.ts"
     }
   },
@@ -32,11 +59,12 @@
     "serve": "vite",
     "build": "vite build && tsx ./post-vite.ts"
   },
-  "author": "",
+  "author": "Justin Lee",
   "license": "ISC",
   "dependencies": {
     "clsx": "^2.1.1",
     "lodash-es": "^4.18.1",
+    "solid-element": "^1.9.2",
     "solid-js": "^1.9.14"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import '../../src/web/public/themes/BookTheme.css';
+import '../../src/web/styles/themes/BookTheme.css';
 
 import { render } from 'solid-js/web';
 import { Books } from '@prospero/web/components';
