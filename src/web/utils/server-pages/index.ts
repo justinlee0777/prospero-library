@@ -1,4 +1,8 @@
-import { IPages, PagesAsIndicesOutput, PagesOutput } from '@prospero/shared';
+import {
+  IPages,
+  PagesAsIndicesOutput,
+  PagesOutput,
+} from '@prospero/shared/models';
 
 import { BaseBookProps } from '../../components/Book';
 

@@ -10,8 +10,8 @@ export default defineConfig({
   plugins: [dts({ tsconfigPath: './tsconfig.prod.json' })],
   resolve: {
     alias: {
-      '@prospero/shared': resolve('../shared/index.ts'),
-      '@prospero/web': resolve('../web/index.ts'),
+      '@prospero/shared': resolve('../shared'),
+      '@prospero/web': resolve('../web'),
     },
   },
   build: {

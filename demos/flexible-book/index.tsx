@@ -2,12 +2,12 @@ import '../../src/web/public/themes/BookTheme.css';
 
 import { render } from 'solid-js/web';
 
+import { FlexibleBook } from '@prospero/web/components';
 import {
   DoublePageBookAnimation,
-  FlexibleBook,
   SinglePageBookAnimation,
-  turnPageOnClick,
-} from '@prospero/web';
+} from '@prospero/web/add-ons/animations';
+import { turnPageOnClick } from '@prospero/web/add-ons/event-listeners';
 
 const fileUrl = new URL('../text-samples/tempest.txt', import.meta.url);
 

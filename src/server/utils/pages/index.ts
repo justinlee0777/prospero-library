@@ -2,10 +2,16 @@ import { access, readFile } from 'fs/promises';
 import http from 'http';
 import path from 'path';
 import playwright from 'playwright';
-import type { BaseBookProps } from '@prospero/web';
-import { IPages, PagesAsIndicesOutput, PagesOutput } from '@prospero/shared';
+import {
+  IPages,
+  PagesAsIndicesOutput,
+  PagesOutput,
+} from '@prospero/shared/models';
 
-export type BookStyles = Pick<BaseBookProps, 'containerStyles' | 'pageStyles'>;
+export interface BookStyles {
+  containerStyles: any;
+  pageStyles: any;
+}
 
 /**
  * This is like the most fragile file in the whole library, huh.

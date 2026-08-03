@@ -12,7 +12,7 @@
     "jsxImportSource": "solid-js",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "paths": {
-      "@prospero/shared": ["../shared"]
+      "@prospero/shared/": ["../shared/"]
     }
   },
   "include": ["./**/*"],

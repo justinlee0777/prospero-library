@@ -12,56 +12,14 @@ import clsx from 'clsx';
 
 import { Page, PageContent } from './Page';
 import { Pages } from '../../utils/pages';
-import type { BookEventListener } from '../../add-ons/event-listeners/models';
-import type { BookAnimation } from '../../add-ons/animations/models';
 import { Lamina } from '../Lamina';
-import type { BookmarkStorage } from '../Bookmark';
 import { LoadingIcon } from '../LoadingIcon';
+import { BookProps, GetPage } from './models';
 
 const PagePicker = lazy(() => import('../PagePicker/lazy'));
 const Bookmark = lazy(() => import('../Bookmark/lazy'));
 
-export interface BaseBookProps {
-  containerStyles: JSX.CSSProperties;
-  pageStyles: JSX.CSSProperties;
-  /** Number of pages to show. */
-  pagesShown: number;
-
-  /** Not removing the element, but hiding it from the UI with aria attributes */
-  hide?: boolean;
-  /** Page to initialize on. */
-  currentPage?: number;
-  /** Show an input that the user can use to change the page directly. */
-  showPagePicker?: boolean;
-  /** Use a bookmark by hooking it to a bookmark storage. */
-  showBookmark?: {
-    storage: BookmarkStorage;
-  };
-  animation?: () => BookAnimation;
-  events?: {
-    onClick?: BookEventListener<MouseEvent>;
-    onKeyDown?: BookEventListener<KeyboardEvent>;
-  };
-}
-
-export interface BookPropsWithPages extends BaseBookProps {
-  pages: Array<string>;
-}
-
-export interface BookPropsWithText extends BaseBookProps {
-  text: string;
-}
-
-export interface BookPropsWithGetPage extends BaseBookProps {
-  getPage: (pageNumber: number) => Promise<string | null>;
-}
-
-export type BookProps =
-  BookPropsWithPages | BookPropsWithText | BookPropsWithGetPage;
-
-export interface GetPage {
-  (pageNumber: number): Promise<string | null> | string | null;
-}
+export * from './models';
 
 export function Book({
   currentPage: initialPage,

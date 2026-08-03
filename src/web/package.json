@@ -6,6 +6,28 @@
   "targets": {
     "main": false
   },
+  "exports": {
+    "add-ons/animations": {
+      "import": "./add-ons/animations.js",
+      "require": "./add-ons/animations.js",
+      "types": "./add-ons/animations.d.ts"
+    },
+    "add-ons/event-listeners": {
+      "import": "./add-ons/event-listeners.js",
+      "require": "./add-ons/event-listeners.js",
+      "types": "./add-ons/event-listeners.d.ts"
+    },
+    "components": {
+      "import": "./components.js",
+      "require": "./components.js",
+      "types": "./components.d.ts"
+    },
+    "utils": {
+      "import": "./utils.js",
+      "require": "./utils.js",
+      "types": "./utils.d.ts"
+    }
+  },
   "scripts": {
     "serve": "vite",
     "build": "vite build && tsx ./post-vite.ts"

@@ -3,6 +3,13 @@
   "version": "2.0.0",
   "type": "module",
   "description": "",
+  "exports": {
+    "./index": {
+      "import": "./index.js",
+      "require": "./index.js",
+      "types": "./index.d.ts"
+    }
+  },
   "scripts": {
     "build:dev": "vite build",
     "build": "vite build --mode production && tsx ./post-vite.ts"

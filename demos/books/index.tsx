@@ -1,7 +1,11 @@
 import '../../src/web/public/themes/BookTheme.css';
 
 import { render } from 'solid-js/web';
-import { Books, changeOnArrowKeys, turnPageOnClick } from '@prospero/web';
+import { Books } from '@prospero/web/components';
+import {
+  changeOnArrowKeys,
+  turnPageOnClick,
+} from '@prospero/web/add-ons/event-listeners';
 
 import { bookStyles, desktopStyles } from './book-styles.const';
 

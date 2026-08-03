@@ -8,12 +8,13 @@ export default defineConfig({
   plugins: [dts({ tsconfigPath: './tsconfig.prod.json' })],
   build: {
     outDir,
+    minify: true,
     sourcemap: true,
     lib: {
       entry: {
-        index: resolve(import.meta.dirname, './index.ts'),
         models: resolve(import.meta.dirname, './models.ts'),
       },
+      formats: ['es'],
     },
   },
 });

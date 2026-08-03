@@ -6,8 +6,8 @@
     "declarationMap": true,
     "composite": true,
     "paths": {
-      "@prospero/web": ["../web"],
-      "@prospero/shared": ["../shared"]
+      "@prospero/web/*": ["../web/*"],
+      "@prospero/shared/*": ["../shared/*"]
     },
     "types": ["node"]
   },

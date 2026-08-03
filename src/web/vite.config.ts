@@ -21,17 +21,16 @@ export default defineConfig({
     cssCodeSplit: true,
     lib: {
       entry: {
-        index: resolve(import.meta.dirname, './index.ts'),
         'add-ons/animations': resolve(
           import.meta.dirname,
-          './add-ons/animations/index.ts',
+          './add-ons/animations.ts',
         ),
         'add-ons/event-listeners': resolve(
           import.meta.dirname,
-          './add-ons/event-listeners/index.ts',
+          './add-ons/event-listeners.ts',
         ),
-        components: resolve(import.meta.dirname, './components/index.ts'),
-        utils: resolve(import.meta.dirname, './utils/index.ts'),
+        components: resolve(import.meta.dirname, './components.ts'),
+        utils: resolve(import.meta.dirname, './utils.ts'),
       },
       // Output as modern ES Modules
       formats: ['es'],

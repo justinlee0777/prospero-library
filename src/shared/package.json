@@ -2,9 +2,15 @@
   "name": "@prospero/shared",
   "version": "2.0.0",
   "type": "module",
-  "types": "./index.ts",
+  "exports": {
+    "./models": {
+      "import": "./models.js",
+      "require": "./models.js",
+      "types": "./models.d.ts"
+    }
+  },
   "scripts": {
-    "build": "vite build"
+    "build": "vite build && tsx post-vite.ts"
   },
   "author": "",
   "license": "ISC",

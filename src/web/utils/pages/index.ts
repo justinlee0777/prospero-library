@@ -2,7 +2,7 @@ import type {
   IPages,
   PagesOutput,
   PagesAsIndicesOutput,
-} from '@prospero/shared';
+} from '@prospero/shared/models';
 
 import { HTMLParser } from '../html-parser';
 
