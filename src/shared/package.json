@@ -1,9 +1,14 @@
 {
-  "name": "@prospero/shared",
+  "name": "@prospero-library/shared",
   "version": "1.0.0",
   "type": "module",
   "exports": {
     "./models": {
+      "import": "./models.js",
+      "require": "./models.js",
+      "types": "./models.d.ts"
+    },
+    "./models.js": {
       "import": "./models.js",
       "require": "./models.js",
       "types": "./models.d.ts"

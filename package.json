@@ -2,7 +2,6 @@
   "version": "2.0.0",
   "type": "module",
   "author": "Justin Lee",
-  "private": true,
   "workspaces": [
     "src/shared",
     "src/web",

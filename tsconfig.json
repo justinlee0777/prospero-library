@@ -4,10 +4,10 @@
     "jsxImportSource": "solid-js",
     "types": ["node"],
     "paths": {
-      "@prospero/web": ["./src/web/index.ts"],
-      "@prospero/web/*": ["./src/web/*"],
-      "@prospero/shared": ["./src/shared/index.ts"],
-      "@prospero/server": ["./src/server/index.ts"]
+      "@prospero-library/web": ["./src/web/index.ts"],
+      "@prospero-library/web/*": ["./src/web/*"],
+      "@prospero-library/shared": ["./src/shared/index.ts"],
+      "@prospero-library/server": ["./src/server/index.ts"]
     }
   },
   "references": [{ "path": "./src/web" }, { "path": "./src/server" }],

@@ -6,7 +6,7 @@ import {
   IPages,
   PagesAsIndicesOutput,
   PagesOutput,
-} from '@prospero/shared/models';
+} from '@prospero-library/shared/models.js';
 
 export interface BookStyles {
   containerStyles: any;
@@ -34,7 +34,9 @@ export class Pages implements IPages {
     private text: string,
     private bookStyles: BookStyles,
   ) {
-    const webPath = this.prod ? '../../../web' : '../../../../dist/web';
+    const webPath = this.prod
+      ? path.join(import.meta.dirname, '../web')
+      : '../../../../dist/web';
 
     this.webDir = path.join(import.meta.dirname, webPath);
   }

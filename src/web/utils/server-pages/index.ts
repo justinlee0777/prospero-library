@@ -2,7 +2,7 @@ import {
   IPages,
   PagesAsIndicesOutput,
   PagesOutput,
-} from '@prospero/shared/models';
+} from '@prospero-library/shared/models.js';
 
 import type { BaseBookProps } from '../../components/Book/index.jsx';
 

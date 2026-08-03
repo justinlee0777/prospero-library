@@ -1,4 +1,4 @@
-import type { BookStyles } from '@prospero/server';
+import type { BookStyles } from '@prospero-library/server';
 
 export const bookStyles: BookStyles = {
   pageStyles: {

@@ -4,7 +4,7 @@ import {
   ProsperoBookElement,
   registerBookComponent,
   turnPageOnClick,
-} from '@prospero/web';
+} from '@prospero-library/web';
 
 registerBookComponent();
 

@@ -5,7 +5,7 @@ import type {
   BookProps,
   BooksProps,
   FlexibleBookProps,
-} from '@prospero/web/components';
+} from '@prospero-library/web/components';
 
 declare module 'solid-js' {
   namespace JSX {

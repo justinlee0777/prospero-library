@@ -9,9 +9,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@prospero/server': resolve('./src/server/index.ts'),
-      '@prospero/shared': resolve('./src/shared/index.ts'),
-      '@prospero/web': resolve('./src/web/index.ts'),
+      '@prospero-library/server': resolve('./src/server/index.ts'),
+      '@prospero-library/shared': resolve('./src/shared/index.ts'),
+      '@prospero-library/web': resolve('./src/web/index.ts'),
     },
   },
 });

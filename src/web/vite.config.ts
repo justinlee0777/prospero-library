@@ -26,7 +26,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@prospero/shared': resolve('../shared/index.ts'),
+      '@prospero-library/shared': resolve('../shared/index.ts'),
     },
   },
   build: {

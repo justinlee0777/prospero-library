@@ -1,5 +1,5 @@
 {
-  "name": "@prospero/web",
+  "name": "@prospero-library/web",
   "version": "1.0.0",
   "type": "module",
   "description": "",
@@ -62,6 +62,7 @@
   "author": "Justin Lee",
   "license": "ISC",
   "dependencies": {
+    "@prospero-library/shared": "^1.0.0",
     "clsx": "^2.1.1",
     "lodash-es": "^4.18.1",
     "solid-element": "^1.9.2",

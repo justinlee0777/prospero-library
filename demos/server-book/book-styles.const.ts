@@ -1,4 +1,4 @@
-import { BookStyles } from '@prospero/web';
+import { BookStyles } from '@prospero-library/web';
 
 export const mobileStyles: BookStyles = {
   containerStyles: {

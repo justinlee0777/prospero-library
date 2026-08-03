@@ -1,4 +1,4 @@
-import { Pages } from '@prospero/server';
+import { Pages } from '@prospero-library/server';
 import { readFile, writeFile } from 'fs/promises';
 import path from 'path';
 
