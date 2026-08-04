@@ -2,6 +2,7 @@ import type { JSX } from 'solid-js/jsx-runtime';
 import type { BookAnimation } from '../../add-ons/animations.js';
 import type { BookEventListener } from '../../add-ons/event-listeners.js';
 import type { BookmarkStorage } from '../Bookmark/index.jsx';
+import type { TableOfContentsProps } from '../TableOfContents/index.jsx';
 
 export interface BaseBookProps {
   containerStyles: JSX.CSSProperties;
@@ -24,6 +25,7 @@ export interface BaseBookProps {
     onClick?: BookEventListener<MouseEvent>;
     onKeyDown?: BookEventListener<KeyboardEvent>;
   };
+  showTableOfContents?: Pick<TableOfContentsProps, 'sections'>;
 }
 
 export interface BookPropsWithPages extends BaseBookProps {

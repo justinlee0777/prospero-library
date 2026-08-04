@@ -7,7 +7,9 @@
       "@prospero-library/web": ["./src/web/index.ts"],
       "@prospero-library/web/*": ["./src/web/*"],
       "@prospero-library/shared": ["./src/shared/index.ts"],
-      "@prospero-library/server": ["./src/server/index.ts"]
+      "@prospero-library/shared/*": ["./src/shared/*"],
+      "@prospero-library/server": ["./src/server/index.ts"],
+      "@prospero-library/server/*": ["./src/server/*"]
     }
   },
   "references": [{ "path": "./src/web" }, { "path": "./src/server" }],

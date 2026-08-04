@@ -1,11 +1,11 @@
 import '../../src/web/styles/themes/BookTheme.css';
 
 import { render } from 'solid-js/web';
-import { Books } from '@prospero-library/web/components';
+import { Books, BookProps } from '../../src/web/components';
 import {
   changeOnArrowKeys,
   turnPageOnClick,
-} from '@prospero-library/web/add-ons/event-listeners';
+} from '../../src/web/add-ons/event-listeners';
 
 import { bookStyles, desktopStyles } from './book-styles.const';
 
@@ -14,6 +14,13 @@ const fileUrl = new URL('./pages.json', import.meta.url);
 const response = await fetch(fileUrl);
 const json: Array<string> = await response.json();
 
+const tableOfContents: BookProps['showTableOfContents'] = {
+  sections: Array(Math.ceil(json.length / 20))
+    .fill(undefined)
+    .map((_, i) => Math.min(i * 20, json.length))
+    .map((pageNumber) => ({ pageNumber, title: pageNumber.toString() })),
+};
+
 render(
   () => (
     <Books
@@ -21,6 +28,7 @@ render(
         {
           pages: json,
           pagesShown: 1,
+          showTableOfContents: tableOfContents,
           events: { onClick: turnPageOnClick },
           ...bookStyles,
         },
@@ -28,6 +36,7 @@ render(
           config: {
             pages: json,
             pagesShown: 2,
+            showTableOfContents: tableOfContents,
             events: {
               onClick: turnPageOnClick,
               onKeyDown: changeOnArrowKeys,

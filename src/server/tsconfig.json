@@ -5,12 +5,7 @@
     "declaration": true,
     "declarationMap": true,
     "composite": true,
-    "paths": {
-      "@prospero-library/web/*": ["../web/*"],
-      "@prospero-library/shared/*": ["../shared/*"]
-    },
     "types": ["node"]
   },
-  "include": ["./**/*"],
-  "references": [{ "path": "../web" }, { "path": "../shared" }]
+  "include": ["./**/*"]
 }

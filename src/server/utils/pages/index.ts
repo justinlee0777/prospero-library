@@ -7,11 +7,9 @@ import {
   PagesAsIndicesOutput,
   PagesOutput,
 } from '@prospero-library/shared/models.js';
+import type { BookProps } from '@prospero-library/web/components';
 
-export interface BookStyles {
-  containerStyles: any;
-  pageStyles: any;
-}
+export type BookStyles = Pick<BookProps, 'containerStyles' | 'pageStyles'>;
 
 /**
  * This is like the most fragile file in the whole library, huh.
@@ -20,7 +18,7 @@ export interface BookStyles {
  */
 export class Pages implements IPages {
   private readonly port = 3000;
-  private readonly prod = import.meta.env.PROD;
+  private readonly prod = import.meta.env?.PROD ?? false;
 
   private readonly mimeTypes: Map<string, string> = new Map([
     ['.html', 'text/html'],

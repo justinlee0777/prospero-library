@@ -17,10 +17,10 @@ import { BookProps, GetPage } from './models.js';
 
 const PagePicker = lazy(() => import('../PagePicker/lazy.js'));
 const Bookmark = lazy(() => import('../Bookmark/lazy.js'));
+const TableOfContents = lazy(() => import('../TableOfContents/lazy.js'));
 
 export * from './models.js';
 
-// TODO: Table of Contents
 export function Book(props: BookProps) {
   const {
     currentPage: initialPage,
@@ -31,6 +31,7 @@ export function Book(props: BookProps) {
     animation,
     showPagePicker,
     showBookmark,
+    showTableOfContents,
     hide,
   } = props;
 
@@ -137,19 +138,21 @@ export function Book(props: BookProps) {
     }
   });
 
-  const decrement = async () => {
-    const page = Math.max(activePage() - pagesShown, 0);
-
+  const goToPage = async (page: number) => {
     if (await getPages(page)) {
       setCurrentPage(page);
     }
   };
 
+  const decrement = async () => {
+    const page = Math.max(activePage() - pagesShown, 0);
+
+    await goToPage(page);
+  };
+
   const increment = async () => {
     const page = activePage() + pagesShown;
-    if (await getPages(page)) {
-      setCurrentPage(page);
-    }
+    await goToPage(page);
   };
 
   const stopPropagation = (event: Event) => event.stopPropagation();
@@ -173,6 +176,8 @@ export function Book(props: BookProps) {
 
   const renderPage = renderPageFn();
   const renderUnderPage = renderPageFn('underPage');
+
+  const [tableOfContentsOpened, setTableOfContentsOpened] = createSignal(false);
 
   return (
     <div
@@ -241,6 +246,25 @@ export function Book(props: BookProps) {
         </Show>
         <Show when={pages.loading}>
           <LoadingIcon className="bookLoadingIcon" />
+        </Show>
+        <Show when={showTableOfContents}>
+          {(tableOfContents) => (
+            <TableOfContents
+              {...tableOfContents()}
+              classes={{
+                trigger: 'bookTableOfContentsTrigger',
+                list: 'bookTableOfContents',
+              }}
+              opened={tableOfContentsOpened}
+              onOpen={() => setTableOfContentsOpened(true)}
+              onClose={() => setTableOfContentsOpened(false)}
+              onSectionSelected={({ pageNumber }) => {
+                goToPage(pageNumber);
+
+                setTableOfContentsOpened(false);
+              }}
+            />
+          )}
         </Show>
       </Lamina>
     </div>

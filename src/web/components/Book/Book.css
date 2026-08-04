@@ -45,4 +45,19 @@
     right: 1em;
     top: 1em;
   }
+
+  .bookTableOfContentsTrigger {
+    left: 0.5em;
+    position: absolute;
+    top: 0.5em;
+  }
+
+  .bookTableOfContents {
+    height: 100%;
+    left: 0;
+    list-style: none;
+    max-width: 50%;
+    position: absolute;
+    top: 0;
+  }
 }
