@@ -7,56 +7,70 @@ import type {
 import { HTMLParser } from '../html-parser/index.js';
 
 export class Pages implements IPages {
-  private parser: HTMLParser;
+  /**
+   * @returns undefined when not done yet.
+   */
+  get pagesLength(): number | undefined {
+    if (this.done) {
+      return this.cachedPages.length;
+    } else {
+      return;
+    }
+  }
+
   private cachedPages: Array<string> = [];
-  private generator: AsyncGenerator<string> | undefined;
-  private lastGeneratorResult: IteratorResult<string> | undefined;
+
+  private done = false;
 
   constructor(
     slate: HTMLElement,
     private text: string,
   ) {
-    this.parser = new HTMLParser(slate);
+    (async () => {
+      const parser = new HTMLParser(slate);
+
+      const generator = parser.generatePages(this.text);
+
+      let generatorResult = await generator.next();
+
+      let i = 0;
+
+      while (!generatorResult.done) {
+        this.cachedPages.push(generatorResult.value);
+
+        await this.cedeToMainThread();
+
+        generatorResult = await generator.next();
+        i++;
+      }
+
+      this.done = true;
+    })();
   }
 
   async get(pageNumber: number): Promise<string | null> {
-    const difference = pageNumber - (this.cachedPages.length - 1);
+    let page = this.cachedPages.at(pageNumber);
 
-    if (difference < 0) {
-      return this.cachedPages[pageNumber];
-    } else if (this.lastGeneratorResult?.done) {
-      return this.cachedPages[pageNumber] || null;
-    } else {
-      const newPages: Array<string> = [];
-      let i = 0;
-      while (i < difference) {
-        if (!this.generator) {
-          this.generator = this.parser.generatePages(this.text);
-        }
+    while (!(page || this.done)) {
+      await this.cedeToMainThread();
 
-        this.lastGeneratorResult = await this.generator.next();
-
-        if (this.lastGeneratorResult.done) {
-          break;
-        } else {
-          newPages.push(this.lastGeneratorResult.value);
-          i++;
-        }
-      }
-
-      this.cachedPages.push(...newPages);
-
-      return this.cachedPages[pageNumber] || null;
+      page = this.cachedPages.at(pageNumber);
     }
+
+    return page ?? null;
   }
 
   async getAll(): Promise<Array<string>> {
     const pages: Array<string> = [];
 
-    const generator = this.parser.generatePages(this.text);
+    let page = await this.get(0);
 
-    for await (const page of generator) {
+    let i = 0;
+
+    while (page) {
       pages.push(page);
+
+      page = await this.get(++i);
     }
 
     return pages;
@@ -88,5 +102,13 @@ export class Pages implements IPages {
       text,
       pages,
     };
+  }
+
+  private async cedeToMainThread() {
+    if ('scheduler' in window) {
+      await scheduler.yield();
+    } else {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
   }
 }

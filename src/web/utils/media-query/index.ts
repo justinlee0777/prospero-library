@@ -68,11 +68,11 @@ export class MediaQueryListenerFactory {
 
     const debouncedResize = debounce(resize, 300);
 
-    const resizeObserver = new ResizeObserver(debouncedResize);
+    window.addEventListener('resize', debouncedResize);
 
-    resizeObserver.observe(container, { box: 'border-box' });
+    resize();
 
-    return () => resizeObserver.disconnect();
+    return () => window.removeEventListener('resize', debouncedResize);
   }
 
   /**
@@ -93,10 +93,10 @@ export class MediaQueryListenerFactory {
 
     const debouncedResize = debounce(resize);
 
-    const resizeObserver = new ResizeObserver(debouncedResize);
+    window.addEventListener('resize', debouncedResize);
 
-    resizeObserver.observe(container, { box: 'border-box' });
+    resize();
 
-    return () => resizeObserver.disconnect();
+    return () => window.removeEventListener('resize', debouncedResize);
   }
 }
