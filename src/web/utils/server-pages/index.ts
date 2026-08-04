@@ -5,12 +5,12 @@ import {
 } from '@prospero-library/shared/models.js';
 
 import type { BaseBookProps } from '../../components/Book/index.jsx';
+import { fetchWithRetry } from './fetch-with-try.js';
 
 export type BookStyles = Pick<BaseBookProps, 'containerStyles' | 'pageStyles'>;
 
 export default interface PaginatedResponse {
   value: {
-    html: boolean;
     bookStyles: BookStyles;
     content: Array<string>;
   };
@@ -39,13 +39,14 @@ export default interface PaginatedResponse {
  * ```
  * const pages = new ServerPages('http://localhost:9292/book-text');
  * ```
- *
- * TODO: Queue up requests reasonably (ex. load up to 50 pages before and after the current page).
  */
 export class ServerPages implements IPages {
   public bookStyles: Promise<BookStyles>;
 
-  private readonly pageSize = 10;
+  private readonly pageSize: number = 10;
+
+  /** Load N pages before and after. */
+  private readonly loadAhead = 2;
 
   /**
    * Cache of requests made to the backend so there are no duplicates.
@@ -55,7 +56,7 @@ export class ServerPages implements IPages {
   private readonly requests: Map<string, Promise<PaginatedResponse>> =
     new Map();
 
-  private pages: Array<string> | undefined;
+  private pagesLength: number | undefined;
 
   constructor(private endpoint: string) {
     this.bookStyles = this.initialize();
@@ -65,32 +66,30 @@ export class ServerPages implements IPages {
    * Fetch pages in batches rather than one at a time, for performance.
    * @param pageNumber
    */
-  async get(pageNumber: number) {
+  async get(pageNumber: number): Promise<string | null> {
     if (pageNumber < 0) {
       return null;
     }
 
     await this.bookStyles;
 
-    const pages = this.pages!;
     const pageSize = this.pageSize;
 
-    if (pageNumber >= pages.length) {
+    if (pageNumber >= this.pagesLength!) {
       return null;
-    } else if (!pages[pageNumber]) {
-      const beginningIndex = Math.floor(pageNumber / pageSize);
-      const batchPageNumber = beginningIndex + 1;
-
-      const { value } = await this.fetch(batchPageNumber, pageSize);
-
-      const pageIndex = beginningIndex * pageSize;
-      const size = Math.min(pageSize, value.content.length);
-      for (let i = 0; i < size; i++) {
-        pages[pageIndex + i] = value.content[i];
-      }
     }
 
-    return pages[pageNumber];
+    let page = await this.getPage(pageNumber);
+
+    if (!page) {
+      const batchPageNumber = this.getBatchPageNumber(pageNumber);
+
+      await this.fetch(batchPageNumber, pageSize);
+
+      page = await this.getPage(pageNumber);
+    }
+
+    return page;
   }
 
   /**
@@ -101,27 +100,19 @@ export class ServerPages implements IPages {
     await this.bookStyles;
 
     const { pageSize } = this;
-    const pages = this.pages!;
-    const fetches: Array<Promise<void>> = [];
+    const fetches: Array<Promise<PaginatedResponse>> = [];
 
-    let i = 0;
-    while (i < pages.length) {
-      const beginningIndex = i * pageSize;
+    for (let i = 0; i < this.pagesLength!; i += this.pageSize) {
+      const fetch = this.fetch(i, pageSize);
 
-      if (!pages[beginningIndex]) {
-        const fetch = this.fetch(i, pageSize).then(({ value }) => {
-          value.content.forEach((page, j) => {
-            pages[beginningIndex + j] = page;
-          });
-        });
-
-        fetches.push(fetch);
-      }
+      fetches.push(fetch);
     }
 
-    await Promise.all(fetches);
+    const paginatedResponses = await Promise.all(fetches);
 
-    return pages;
+    return paginatedResponses.reduce((acc, response) => {
+      return acc.concat(response.value.content);
+    }, [] as Array<string>);
   }
 
   async getData(): Promise<PagesOutput> {
@@ -157,12 +148,12 @@ export class ServerPages implements IPages {
     pageNumber: number,
     pageSize: number,
   ): Promise<PaginatedResponse> {
-    const requestId = `${pageNumber}-${pageNumber + pageSize}`;
+    const requestId = this.getRequestId(pageNumber);
 
     if (this.requests.has(requestId)) {
       return this.requests.get(requestId)!;
     } else {
-      const request = fetch(
+      const request = fetchWithRetry(
         `${this.endpoint}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
       ).then((response) => response.json());
 
@@ -172,14 +163,54 @@ export class ServerPages implements IPages {
     }
   }
 
+  private async getPage(pageNumber: number): Promise<string | null> {
+    const batchPageNumber = this.getBatchPageNumber(pageNumber);
+    const requestId = this.getRequestId(batchPageNumber);
+
+    const request = this.requests.get(requestId);
+
+    setTimeout(() => this.loadPagesAhead(batchPageNumber), 300);
+
+    if (request) {
+      const response = await request;
+
+      return response.value.content[pageNumber % this.pageSize!];
+    } else {
+      return null;
+    }
+  }
+
   /**
    * Gets metadata on the pages.
    */
   private async initialize(): Promise<BookStyles> {
     const { value, page } = await this.fetch(1, 1);
 
-    this.pages = Array(page.totalSize);
+    this.pagesLength = page.totalSize;
 
     return value.bookStyles;
+  }
+
+  private getBatchPageNumber(
+    pageNumber: number,
+    pageSize = this.pageSize,
+  ): number {
+    const beginningIndex = Math.floor(pageNumber / pageSize);
+    return beginningIndex + 1;
+  }
+
+  private getRequestId(pageNumber: number, pageSize = this.pageSize): string {
+    return `${pageNumber}-${this.pageSize}`;
+  }
+
+  private async loadPagesAhead(pageNumber: number) {
+    await this.bookStyles;
+
+    const before = Math.max(pageNumber - this.loadAhead, 0),
+      after = Math.min(pageNumber + this.loadAhead, this.pagesLength!);
+
+    for (let i = before; i <= after; i++) {
+      this.fetch(i, this.pageSize);
+    }
   }
 }

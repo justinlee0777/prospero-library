@@ -31,6 +31,19 @@ render(
             getPage: (pageNumber) => desktopPages.get(pageNumber),
             pagesShown: 2,
             events: { onClick: turnPageOnClick, onKeyDown: changeOnArrowKeys },
+            showPagePicker: true,
+            showBookmark: {
+              storage: {
+                get: () => {
+                  const savedData = localStorage.getItem('ulysses-desktop');
+                  if (savedData) {
+                    return JSON.parse(savedData);
+                  }
+                },
+                save: (data) =>
+                  localStorage.setItem('ulysses-desktop', JSON.stringify(data)),
+              },
+            },
             ...desktopStyles,
           },
           media: {
