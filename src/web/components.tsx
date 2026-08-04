@@ -30,6 +30,7 @@ const defaultBookProps: BookProps = {
   pagesShown: 1,
   containerStyles: {},
   pageStyles: {},
+  showTableOfContents: undefined,
 };
 
 export function registerBookComponent() {

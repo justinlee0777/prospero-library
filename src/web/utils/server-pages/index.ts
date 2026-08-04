@@ -56,7 +56,7 @@ export class ServerPages implements IPages {
   private readonly requests: Map<string, Promise<PaginatedResponse>> =
     new Map();
 
-  private pagesLength: number | undefined;
+  private pagesMetadata: PaginatedResponse['page'] | undefined;
 
   constructor(private endpoint: string) {
     this.bookStyles = this.initialize();
@@ -75,7 +75,7 @@ export class ServerPages implements IPages {
 
     const pageSize = this.pageSize;
 
-    if (pageNumber >= this.pagesLength!) {
+    if (pageNumber >= this.pagesMetadata!.pages) {
       return null;
     }
 
@@ -102,7 +102,7 @@ export class ServerPages implements IPages {
     const { pageSize } = this;
     const fetches: Array<Promise<PaginatedResponse>> = [];
 
-    for (let i = 0; i < this.pagesLength!; i += this.pageSize) {
+    for (let i = 0; i < this.pagesMetadata!.pages; i += this.pageSize) {
       const fetch = this.fetch(i, pageSize);
 
       fetches.push(fetch);
@@ -148,7 +148,7 @@ export class ServerPages implements IPages {
     pageNumber: number,
     pageSize: number,
   ): Promise<PaginatedResponse> {
-    const requestId = this.getRequestId(pageNumber);
+    const requestId = this.getRequestId(pageNumber, pageSize);
 
     if (this.requests.has(requestId)) {
       return this.requests.get(requestId)!;
@@ -186,7 +186,7 @@ export class ServerPages implements IPages {
   private async initialize(): Promise<BookStyles> {
     const { value, page } = await this.fetch(1, 1);
 
-    this.pagesLength = page.totalSize;
+    this.pagesMetadata = page;
 
     return value.bookStyles;
   }
@@ -200,14 +200,17 @@ export class ServerPages implements IPages {
   }
 
   private getRequestId(pageNumber: number, pageSize = this.pageSize): string {
-    return `${pageNumber}-${this.pageSize}`;
+    return `${pageNumber}-${pageSize}`;
   }
 
   private async loadPagesAhead(pageNumber: number) {
     await this.bookStyles;
 
     const before = Math.max(pageNumber - this.loadAhead, 0),
-      after = Math.min(pageNumber + this.loadAhead, this.pagesLength!);
+      after = Math.min(
+        pageNumber + this.loadAhead,
+        this.pagesMetadata!.totalSize,
+      );
 
     for (let i = before; i <= after; i++) {
       this.fetch(i, this.pageSize);

@@ -13,7 +13,8 @@
     "serve": "vite",
     "build": "tsx ./test.ts && rm -rf dist && npm run build --workspaces && tsx post-build.ts",
     "format": "prettier -w .",
-    "test": "playwright test tests"
+    "test": "playwright test tests",
+    "bump-patch-version": "npm version patch --workspaces"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",

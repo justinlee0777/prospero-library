@@ -7,17 +7,6 @@ import type {
 import { HTMLParser } from '../html-parser/index.js';
 
 export class Pages implements IPages {
-  /**
-   * @returns undefined when not done yet.
-   */
-  get pagesLength(): number | undefined {
-    if (this.done) {
-      return this.cachedPages.length;
-    } else {
-      return;
-    }
-  }
-
   private cachedPages: Array<string> = [];
 
   private done = false;
