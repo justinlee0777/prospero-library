@@ -1,14 +1,14 @@
 import '../../src/web/styles/themes/BookTheme.css';
 
 import { render } from 'solid-js/web';
-import { Books } from '@prospero-library/web/components.js';
-import { ServerPages } from '@prospero-library/web/utils.js';
+import { Books } from '../../src/web/components.js';
+import { ServerPages } from '../../src/web/utils.js';
 import {
   changeOnArrowKeys,
   turnPageOnClick,
-} from '@prospero-library/web/add-ons/event-listeners.js';
+} from '../../src/web/add-ons/event-listeners.js';
 
-import { mobileStyles, desktopStyles } from './book-styles.const';
+import { mobileStyles, desktopStyles } from './book-styles.const.js';
 
 const endpointBase = `http://localhost:8080/api/prospero/ulysses/pages`;
 

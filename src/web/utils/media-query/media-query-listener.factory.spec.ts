@@ -1,15 +1,8 @@
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  jest,
-  test,
-} from '@jest/globals';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
-import MediaQueryListenerFactory from './media-query-listener.factory';
+import { MediaQueryListenerFactory } from './index';
 
 describe('MediaQueryListenerFactory', () => {
   let oldInnerWidth: number;
@@ -23,7 +16,7 @@ describe('MediaQueryListenerFactory', () => {
     oldMatchMedia = window.matchMedia;
     media = [];
 
-    window.matchMedia = jest.fn().mockImplementation(() => {
+    window.matchMedia = vi.fn().mockImplementation(() => {
       const queryList = {
         matches: false,
       };
@@ -39,20 +32,20 @@ describe('MediaQueryListenerFactory', () => {
     window.matchMedia = oldMatchMedia;
   });
 
-  test('creates a listener for several viewport widths', () => {
+  it('creates a listener for several viewport widths', () => {
     const values = Array(3);
 
-    const foo = jest
+    const foo = vi
       .fn()
       .mockImplementation(
         (state: boolean) => (values[0] = state ? 'show' : 'hide'),
       );
-    const bar = jest
+    const bar = vi
       .fn()
       .mockImplementation(
         (state: boolean) => (values[1] = state ? 'show' : 'hide'),
       );
-    const baz = jest
+    const baz = vi
       .fn()
       .mockImplementation(
         (state: boolean) => (values[2] = state ? 'show' : 'hide'),
@@ -84,14 +77,14 @@ describe('MediaQueryListenerFactory', () => {
     (bazMedia as any).matches = true;
     window.dispatchEvent(new Event('resize'));
 
-    jest.advanceTimersByTime(300);
+    vi.advanceTimersByTime(300);
 
     expect(values).toEqual(['hide', 'hide', 'show']);
     expect(baz).toHaveBeenCalledTimes(2);
 
     // No redundant calls
 
-    jest.advanceTimersByTime(300);
+    vi.advanceTimersByTime(300);
     window.dispatchEvent(new Event('resize'));
 
     expect(values).toEqual(['hide', 'hide', 'show']);
@@ -100,7 +93,7 @@ describe('MediaQueryListenerFactory', () => {
     (bazMedia as any).matches = false;
     (barMedia as any).matches = true;
 
-    jest.advanceTimersByTime(300);
+    vi.advanceTimersByTime(300);
     window.dispatchEvent(new Event('resize'));
 
     expect(values).toEqual(['hide', 'show', 'hide']);
@@ -109,10 +102,10 @@ describe('MediaQueryListenerFactory', () => {
     destroy();
   });
 
-  test('creates a listener for an element resizing', () => {
-    const mockObserve = jest.fn();
-    const mockUnobserve = jest.fn();
-    const mockDisconnect = jest.fn();
+  it('creates a listener for an element resizing', () => {
+    const mockObserve = vi.fn();
+    const mockUnobserve = vi.fn();
+    const mockDisconnect = vi.fn();
 
     let trigger: any;
 
@@ -129,7 +122,7 @@ describe('MediaQueryListenerFactory', () => {
     const element = document.createElement('div');
     document.body.appendChild(element);
 
-    const mockSize = jest.fn();
+    const mockSize = vi.fn();
 
     const destroy = MediaQueryListenerFactory.createSizer(
       {
@@ -143,7 +136,7 @@ describe('MediaQueryListenerFactory', () => {
 
     trigger();
 
-    jest.advanceTimersByTime(300);
+    vi.advanceTimersByTime(300);
 
     expect(mockSize).toHaveBeenCalledTimes(1);
     // Sadly JSDOM does not do any calculation, so we'll have to be happy with this.
@@ -151,7 +144,7 @@ describe('MediaQueryListenerFactory', () => {
 
     trigger();
 
-    jest.advanceTimersByTime(300);
+    vi.advanceTimersByTime(300);
 
     expect(mockSize).toHaveBeenCalledTimes(2);
 

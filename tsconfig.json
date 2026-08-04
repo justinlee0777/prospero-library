@@ -2,7 +2,10 @@
   "compilerOptions": {
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "types": ["node"],
+    "types": ["node", "vitest/globals"],
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "paths": {
       "@prospero-library/web": ["./src/web/index.ts"],
       "@prospero-library/web/*": ["./src/web/*"],
