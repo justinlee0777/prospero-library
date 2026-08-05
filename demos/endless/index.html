@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Prospero - Endless Book</title>
+    <style>
+      body {
+        & > header {
+          flex: 0;
+        }
+
+        & > main {
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          gap: 1em;
+          min-height: 0;
+          position: relative;
+        }
+
+        .page {
+          position: relative;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header><h1>Prospero - Endless Book</h1></header>
+    <main id="root"></main>
+    <script type="module" src="./index.tsx"></script>
+  </body>
+</html>

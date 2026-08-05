@@ -10,6 +10,8 @@
 
 @import url('../components/LoadingIcon/LoadingIcon.css');
 
+@import url('../components/Page//Page.css');
+
 @import url('../components/PagePicker/PagePicker.css');
 
 @import url('../components/TableOfContents/TableOfContents.css');

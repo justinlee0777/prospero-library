@@ -17,17 +17,10 @@ export class Pages implements IPages {
     const generator = (this.generator = HTMLParser.generatePages(slate, text));
 
     (async () => {
-      let generatorResult = await generator.next();
-
-      let i = 0;
-
-      while (!generatorResult.done) {
-        this.cachedPages.push(generatorResult.value);
+      for await (const value of generator) {
+        this.cachedPages.push(value);
 
         await this.cedeToMainThread();
-
-        generatorResult = await generator.next();
-        i++;
       }
 
       this.done = true;

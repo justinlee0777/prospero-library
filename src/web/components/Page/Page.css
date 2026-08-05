@@ -1,0 +1,27 @@
+@layer prospero {
+  .page,
+  .slate {
+    box-sizing: border-box;
+    height: 100%;
+    overflow-y: hidden;
+    top: 0;
+    white-space: pre-wrap;
+  }
+
+  .page {
+    position: relative;
+
+    .pageNumber {
+      bottom: 1em;
+      right: 50%;
+      position: absolute;
+      translate: -50%;
+    }
+  }
+
+  .slate {
+    box-sizing: border-box;
+    left: -99in;
+    position: absolute;
+  }
+}

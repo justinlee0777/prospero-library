@@ -4,6 +4,8 @@ export * from './components/Books/index.jsx';
 
 export * from './components/FlexibleBook/index.jsx';
 
+export * from './components/Page/index.jsx';
+
 import { customElement, noShadowDOM } from 'solid-element';
 
 import { Book, BookProps } from './components/Book/index.jsx';
@@ -12,6 +14,12 @@ import {
   FlexibleBook,
   FlexibleBookProps,
 } from './components/FlexibleBook/index.jsx';
+import {
+  Page,
+  PageProps,
+  Slate,
+  SlateProps,
+} from './components/Page/index.jsx';
 
 function checkEnvironment(tagName: string): boolean {
   return !(typeof window === 'undefined' && customElements.get(tagName));
@@ -90,6 +98,46 @@ export function registerFlexibleBookComponent() {
 
 export interface ProsperoFlexibleBookElement
   extends HTMLElement, FlattenUnion<FlexibleBookProps> {}
+
+export function registerPageComponent() {
+  const tagName = 'prospero-page';
+
+  if (checkEnvironment(tagName)) {
+    const props: PageProps = {
+      page: {
+        number: 0,
+        content: '',
+      },
+      styles: {},
+    };
+
+    customElement(tagName, props, (props: PageProps) => {
+      noShadowDOM();
+      return <Page {...props} />;
+    });
+  }
+}
+
+export interface ProsperoPageElement
+  extends HTMLElement, FlattenUnion<Omit<PageProps, 'className'>> {}
+
+export function registerSlateComponent() {
+  const tagName = 'prospero-slate';
+
+  if (checkEnvironment(tagName)) {
+    const props: SlateProps = {
+      styles: {},
+    };
+
+    customElement(tagName, props, (props: SlateProps) => {
+      noShadowDOM();
+      return <Slate {...props} />;
+    });
+  }
+}
+
+export interface ProsperoSlateElement
+  extends HTMLElement, FlattenUnion<SlateProps> {}
 
 import type { ComponentProps } from 'solid-js';
 

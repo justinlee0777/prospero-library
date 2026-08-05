@@ -11,7 +11,7 @@ import {
 } from 'solid-js';
 import clsx from 'clsx';
 
-import { Page, PageContent } from './Page/index.jsx';
+import { Page, PageContent, Slate } from '../Page/index.jsx';
 import { Pages } from '../../utils/pages/index.js';
 import { Lamina } from '../Lamina/index.jsx';
 import { LoadingIcon } from '../LoadingIcon/index.jsx';
@@ -180,6 +180,7 @@ export function Book(props: BookProps) {
           page={page}
           styles={{
             ...pageStyles,
+            position: 'absolute',
             left: `${portion * i}%`,
             width: `${portion}%`,
           }}
@@ -218,17 +219,13 @@ export function Book(props: BookProps) {
     >
       {underPages().map(renderUnderPage)}
       {renderedPages().map(renderPage)}
-      <div
-        class="slate"
+      <Slate
         ref={slateElement!}
-        style={{
+        styles={{
           ...pageStyles,
-          'box-sizing': 'border-box',
-          position: 'absolute',
-          left: '-99in',
           width: `${portion}%`,
         }}
-      ></div>
+      />
       <Lamina ref={laminaElement!}>
         <Show when={showPagePicker}>
           <PagePicker

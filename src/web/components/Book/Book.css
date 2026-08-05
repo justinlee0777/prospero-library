@@ -6,25 +6,6 @@
     &.bookHidden {
       display: none;
     }
-
-    .page,
-    .slate {
-      box-sizing: border-box;
-      height: 100%;
-      overflow-y: hidden;
-      position: absolute;
-      top: 0;
-      white-space: pre-wrap;
-    }
-
-    .page {
-      .pageNumber {
-        bottom: 1em;
-        right: 50%;
-        position: absolute;
-        translate: -50%;
-      }
-    }
   }
 
   .bookPagePicker {
