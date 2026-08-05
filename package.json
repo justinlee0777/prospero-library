@@ -14,7 +14,8 @@
     "build": "tsx ./test.ts && rm -rf dist && npm run build --workspaces && tsx post-build.ts",
     "format": "prettier -w .",
     "test": "playwright test tests",
-    "bump-patch-version": "npm version patch --workspaces"
+    "bump-patch-version": "npm version patch --workspaces",
+    "publish:libs": "npm run build && npm publish ./dist/shared && npm publish ./dist/web && npm publish ./dist/server"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",

@@ -5,6 +5,8 @@ import {
   createResource,
   createSignal,
   lazy,
+  onCleanup,
+  onMount,
   Show,
 } from 'solid-js';
 import clsx from 'clsx';
@@ -35,12 +37,6 @@ export function Book(props: BookProps) {
     hide,
   } = props;
 
-  let resolveSlatePromise: (slate: HTMLDivElement) => void;
-
-  const slatePromise = new Promise<HTMLDivElement>((resolve) => {
-    resolveSlatePromise = resolve;
-  });
-
   // Used specifically for animations.
   const [underPages, setUnderPages] = createSignal<Array<PageContent>>([]);
 
@@ -48,32 +44,35 @@ export function Book(props: BookProps) {
     [],
   );
 
-  let resolveGetPagePromise: (getPage: GetPage) => void;
+  let slateElement: HTMLDivElement | undefined;
 
-  const getPagePromise = new Promise<GetPage>((resolve) => {
-    resolveGetPagePromise = resolve;
-  });
-
+  const [getPageFn, setGetPageFn] = createSignal<GetPage>();
+  /*
   const getPage: GetPage = async (pageNumber: number) =>
     getPagePromise.then((getPageFn) => getPageFn(pageNumber));
+  */
 
   if ('pages' in props) {
-    resolveGetPagePromise!((pageNumber) => {
+    setGetPageFn(() => (pageNumber) => {
       if (pageNumber < 0 || pageNumber >= props.pages.length) {
         return null;
       } else {
         return props.pages[pageNumber];
       }
     });
-  } else if ('text' in props) {
-    slatePromise.then((slateElement) => {
+  } else if ('getPage' in props) {
+    setGetPageFn(() => props.getPage);
+  }
+
+  onMount(() => {
+    if ('text' in props && slateElement) {
       const pages = new Pages(slateElement, props.text);
 
-      resolveGetPagePromise(pages.get.bind(pages));
-    });
-  } else {
-    resolveGetPagePromise!(props.getPage);
-  }
+      setGetPageFn(() => pages.get.bind(pages));
+
+      onCleanup(() => pages.cleanup());
+    }
+  });
 
   let bookElement: HTMLDivElement;
 
@@ -88,9 +87,12 @@ export function Book(props: BookProps) {
   const [currentPage, setCurrentPage] = createSignal<number | undefined>();
 
   const activePage = (): number =>
-    currentPage() ?? bookmarkData()?.pageNumber ?? initialPage ?? 0;
+    Math.max(
+      currentPage() ?? bookmarkData()?.pageNumber ?? initialPage ?? 0,
+      0,
+    );
 
-  const getPages = async (pageNumber: number) => {
+  const getPages = async (pageNumber: number, getPage: GetPage) => {
     const pages: Array<{ number: number; content: string | null }> = [];
 
     for (let i = 0; i < pagesShown; i++) {
@@ -109,9 +111,16 @@ export function Book(props: BookProps) {
     }
   };
 
-  const [pages] = createResource(activePage, async (pageNumber) => {
-    return getPages(pageNumber);
-  });
+  const [pages] = createResource(
+    () => ({ pageNumber: activePage(), getPage: getPageFn() }),
+    async ({ pageNumber, getPage }) => {
+      if (getPage) {
+        return getPages(pageNumber, getPage);
+      } else {
+        return [];
+      }
+    },
+  );
 
   createEffect(async () => {
     const pagesValue = pages();
@@ -139,7 +148,11 @@ export function Book(props: BookProps) {
   });
 
   const goToPage = async (page: number) => {
-    if (await getPages(page)) {
+    const getPage = getPageFn();
+    if (!getPage) {
+      return;
+    }
+    if (await getPages(page, getPage)) {
       setCurrentPage(page);
     }
   };
@@ -207,7 +220,7 @@ export function Book(props: BookProps) {
       {renderedPages().map(renderPage)}
       <div
         class="slate"
-        ref={(element) => resolveSlatePromise(element)}
+        ref={slateElement!}
         style={{
           ...pageStyles,
           'box-sizing': 'border-box',

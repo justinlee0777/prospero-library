@@ -7,19 +7,16 @@ import type {
 import { HTMLParser } from '../html-parser/index.js';
 
 export class Pages implements IPages {
+  private generator: AsyncGenerator<string>;
+
   private cachedPages: Array<string> = [];
 
   private done = false;
 
-  constructor(
-    slate: HTMLElement,
-    private text: string,
-  ) {
+  constructor(slate: HTMLElement, text: string) {
+    const generator = (this.generator = HTMLParser.generatePages(slate, text));
+
     (async () => {
-      const parser = new HTMLParser(slate);
-
-      const generator = parser.generatePages(this.text);
-
       let generatorResult = await generator.next();
 
       let i = 0;
@@ -91,6 +88,10 @@ export class Pages implements IPages {
       text,
       pages,
     };
+  }
+
+  cleanup(): void {
+    this.generator.return(null);
   }
 
   private async cedeToMainThread() {

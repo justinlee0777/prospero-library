@@ -2,12 +2,12 @@ import '../../src/web/styles/themes/BookTheme.css';
 
 import { render } from 'solid-js/web';
 
-import { FlexibleBook } from '../../src/web/components';
+import { FlexibleBook } from '../../src/web/components.jsx';
 import {
   DoublePageBookAnimation,
   SinglePageBookAnimation,
-} from '../../src/web/add-ons/animations';
-import { turnPageOnClick } from '../../src/web/add-ons/event-listeners';
+} from '../../src/web/add-ons/animations.js';
+import { turnPageOnClick } from '../../src/web/add-ons/event-listeners.js';
 
 const fileUrl = new URL('../text-samples/tempest.txt', import.meta.url);
 
