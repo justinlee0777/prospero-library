@@ -11,6 +11,10 @@
   .page {
     position: relative;
 
+    .pageContent {
+      display: contents;
+    }
+
     .pageNumber {
       bottom: 1em;
       right: 50%;

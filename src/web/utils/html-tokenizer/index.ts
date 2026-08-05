@@ -1,9 +1,5 @@
 import { Token, TokenType } from '../html-tokens.js';
 
-interface Config {
-  footnotes?: string;
-}
-
 const allowedVoidTags = ['br'];
 
 const voidTags = [
@@ -28,22 +24,12 @@ export class HTMLTokenizer {
 
   private generator: Generator<Token>;
 
-  private footnotes: Array<Element> = [];
-
-  constructor(text: string, config: Config) {
+  constructor(text: string) {
     const loader = this.loadHTML(text);
 
     const element = this.getRoot(loader);
 
-    if (config.footnotes) {
-      const footnotes = (this.footnotes = [
-        ...element.querySelectorAll(config.footnotes),
-      ]);
-
-      footnotes.forEach((element) => element.remove());
-    }
-
-    this.generator = this.parseHTMLElement(element, config);
+    this.generator = this.parseHTMLElement(element);
   }
 
   *getTokens(): Generator<Token> {
@@ -67,10 +53,7 @@ export class HTMLTokenizer {
     return element.textContent ?? '';
   }
 
-  private *parseHTMLElement(
-    element: Element,
-    config: Config,
-  ): Generator<Token> {
+  private *parseHTMLElement(element: Element): Generator<Token> {
     for (const node of element.childNodes) {
       switch (node.nodeType) {
         case 1:
@@ -83,20 +66,6 @@ export class HTMLTokenizer {
 
           const openingPattern = /<[A-Za-z0-9]+.*?\/?>/;
 
-          let footnote: Element | undefined;
-
-          if (this.footnotes.length > 0) {
-            const footnoteIdentifier = (element as HTMLAnchorElement).href
-              ?.split('#')
-              .at(-1);
-
-            if (footnoteIdentifier) {
-              footnote = this.footnotes.find((element) =>
-                element.matches(`#${footnoteIdentifier}`),
-              );
-            }
-          }
-
           yield {
             tag: {
               name: tagName,
@@ -105,10 +74,9 @@ export class HTMLTokenizer {
               closing,
             },
             type: TokenType.HTML,
-            footnote,
           };
 
-          yield* this.parseHTMLElement(element, config);
+          yield* this.parseHTMLElement(element);
 
           break;
         case 3:

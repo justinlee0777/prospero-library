@@ -113,7 +113,7 @@ export class HTMLParser {
 
     let pageContent = '';
 
-    const tokenizer = new HTMLTokenizer(text, {});
+    const tokenizer = new HTMLTokenizer(text);
 
     const tokens = tokenizer.getTokens();
 

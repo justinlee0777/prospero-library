@@ -22,7 +22,6 @@ export interface HTMLToken {
     closing?: string;
   };
   type: TokenType.HTML;
-  footnote?: Element;
 }
 
 /**
