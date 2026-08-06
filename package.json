@@ -11,7 +11,7 @@
   "license": "ISC",
   "scripts": {
     "serve": "vite",
-    "build": "tsx ./test.ts && rm -rf dist && npm run build --workspaces && tsx post-build.ts",
+    "build": "rm -rf dist && npm run build --workspaces && tsx post-build.ts && tsx ./test.ts",
     "format": "prettier -w .",
     "test": "playwright test tests",
     "bump-patch-version": "npm version patch --workspaces",

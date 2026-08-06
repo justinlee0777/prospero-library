@@ -23,13 +23,6 @@ export class ParserContexts {
     return this.currentContext?.closingTag;
   }
 
-  getFullClosingTagForNewPage(): string {
-    return this.contexts.reduce(
-      (tag, context) => (tag += context.closingTag ?? ''),
-      '',
-    );
-  }
-
   markAsFragmented() {
     for (const context of this.contexts) {
       context.element.classList.add('prospero--fragment');
@@ -37,11 +30,11 @@ export class ParserContexts {
   }
 }
 
-export const dash = '-';
+const dash = '-';
 
-export const whitespace = ' ';
+const whitespace = ' ';
 
-export const newline = '\n';
+const newline = '\n';
 
 export class HTMLParser {
   static async *generateParserStates(
@@ -93,6 +86,8 @@ export class HTMLParser {
 
     const tokens = tokenizer.getTokens();
 
+    let textAdded = false;
+
     function* handleChange(token: string) {
       let newPageContent = pageContent + token;
 
@@ -101,14 +96,21 @@ export class HTMLParser {
       if (textElement.clientHeight >= pageHeight) {
         textElement.innerHTML = pageContent;
 
-        // Need to notify the client the current element is a fragment, cut off from a previous page.
-        contexts.markAsFragmented();
+        /*
+         * TODO: This is problematic. Simply because text has not been added does not mean the _every_ tag is not
+         * a fragment. This probably only works for simple trees that are maybe only 1 or 2 deep.
+         * A more lasting solution is needed.
+         */
+        if (textAdded) {
+          // Need to notify the client the current element is a fragment, cut off from a previous page.
+          contexts.markAsFragmented();
+        }
 
         const openingTag = contexts.getFullOpeningTagForNewPage();
 
         newPageContent = `${openingTag}${token}`;
 
-        yield textElement.innerHTML + contexts.getFullClosingTagForNewPage();
+        yield textElement.innerHTML;
       }
 
       pageContent = newPageContent;
@@ -116,6 +118,7 @@ export class HTMLParser {
 
     for (const token of tokens) {
       if (token.type === TokenType.TEXT) {
+        // Need to guarantee some text was used from a tag before appending the "fragment" class
         const textContent = token.content;
 
         const textTokens = textContent.matchAll(tokenExpression);
@@ -124,7 +127,11 @@ export class HTMLParser {
           const [word] = textToken;
 
           yield* handleChange(word);
+
+          textAdded = true;
         }
+
+        textAdded = false;
       } else if (token.type === TokenType.HTML) {
         let newToken: string;
 
