@@ -14,14 +14,44 @@ export interface TextToken {
   type: TokenType.TEXT;
 }
 
-export interface HTMLToken {
-  /** Information on the tag if the text is nested in an HTML tag. */
-  tag: {
-    name: string;
-    opening: string;
-    closing?: string;
-  };
-  type: TokenType.HTML;
+export class HTMLToken {
+  type: TokenType.HTML = TokenType.HTML;
+
+  get name(): string {
+    return this.element.tagName.toLowerCase();
+  }
+
+  get openingTag(): string {
+    const { element } = this;
+
+    if (!element.innerHTML) {
+      return element.outerHTML;
+    }
+
+    const clone = element.cloneNode(false) as HTMLElement;
+    const emptyOuter = clone.outerHTML;
+
+    const closingLen = this.closingTag!.length ?? 0;
+    return emptyOuter.slice(0, -closingLen);
+  }
+
+  get closingTag(): string | undefined {
+    const { element } = this;
+
+    if (!element.innerHTML) {
+      return;
+    }
+
+    const outer = element.outerHTML;
+    const tagNameLen = element.tagName.length;
+
+    // A closing tag is always: "</" (2) + tagNameLen + ">" (1) = tagNameLen + 3
+    const closingTagLength = tagNameLen + 3;
+
+    return outer.slice(-closingTagLength);
+  }
+
+  constructor(public element: HTMLElement) {}
 }
 
 /**

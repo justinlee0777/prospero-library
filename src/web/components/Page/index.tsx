@@ -31,5 +31,5 @@ export interface SlateProps {
 }
 
 export function Slate({ styles, ref }: SlateProps) {
-  return <div class="slate" style={{ ...styles }} ref={ref} />;
+  return <div class="page slate" style={{ ...styles }} ref={ref} />;
 }

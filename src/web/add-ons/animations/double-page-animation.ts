@@ -20,7 +20,7 @@ export class DoublePageBookAnimation implements BookAnimation {
   async changePage(
     pageNumber: number,
     oldPages: Array<HTMLElement>,
-    [leftPage, rightPage]: [HTMLElement, HTMLElement],
+    newPages: Array<HTMLElement>,
   ): Promise<void> {
     // Do not animate if there are no pages to delete.
     if (oldPages.length === 0) {
@@ -31,10 +31,14 @@ export class DoublePageBookAnimation implements BookAnimation {
      * We're only animating the last two pages
      * (we know this, as pages are prepended so the oldest pages are at the top of the queue).
      */
-    const [oldLeftPage, oldRightPage] = oldPages;
+    const oldLeftPage = oldPages.at(0),
+      oldRightPage = oldPages.at(1);
 
-    let overPage: HTMLElement; // Always a page to-be-removed. This starts visible then is flipped invisible.
-    let underPage: HTMLElement; // Always a new page. Start invisible then is flipped visible.
+    const leftPage = newPages.at(0),
+      rightPage = newPages.at(1);
+
+    let overPage: HTMLElement | undefined; // Always a page to-be-removed. This starts visible then is flipped invisible.
+    let underPage: HTMLElement | undefined; // Always a new page. Start invisible then is flipped visible.
 
     // Below classes describe whether the page is a right or left page.
     let overPageClass: string;
@@ -64,17 +68,21 @@ export class DoublePageBookAnimation implements BookAnimation {
     }
 
     // If the over page is currently animated, do not send another command for animation.
-    const isOverPageAnimating = overPage.classList.contains(
+    const isOverPageAnimating = overPage?.classList.contains(
       'doublePageAnimating',
     );
 
     // Add the classes to the pages so that they are initialized with their property transform properties.
-    overPage.classList.add('doublePageAnimating', overPageClass);
-    underPage.classList.add('doublePageAnimating', underPageClass, 'unveiling');
+    overPage?.classList.add('doublePageAnimating', overPageClass);
+    underPage?.classList.add(
+      'doublePageAnimating',
+      underPageClass,
+      'unveiling',
+    );
 
     // Flip the under page.
     const animations = [
-      underPage.animate(
+      underPage?.animate(
         {
           transform: ['rotateY(0)'],
           zIndex: String(oldPages.length * 10),
@@ -86,7 +94,7 @@ export class DoublePageBookAnimation implements BookAnimation {
     if (!isOverPageAnimating) {
       // Flip the over page.
       animations.push(
-        overPage.animate(
+        overPage?.animate(
           {
             transform: ['rotateY(180deg)'],
           },
@@ -101,7 +109,7 @@ export class DoublePageBookAnimation implements BookAnimation {
     await Promise.all(animations);
 
     // Reset the under page's state; work is done.
-    underPage.classList.remove(
+    underPage?.classList.remove(
       'doublePageAnimating',
       underPageClass,
       'unveiling',

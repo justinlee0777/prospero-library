@@ -1,26 +1,12 @@
-import { Token, TokenType } from '../html-tokens.js';
+import { HTMLToken, Token, TokenType } from '../html-tokens.js';
 
 const allowedVoidTags = ['br'];
-
-const voidTags = [
-  ...allowedVoidTags,
-  'area',
-  'col',
-  'embed',
-  'hr',
-  'img',
-  'input',
-  'link',
-  'meta',
-  'param',
-];
 
 /**
  * Creates tokens out of an HTML string that the HTMLParser consumes.
  */
 export class HTMLTokenizer {
   private static allowedVoidTags = allowedVoidTags;
-  private static voidTags = voidTags;
 
   private generator: Generator<Token>;
 
@@ -45,10 +31,6 @@ export class HTMLTokenizer {
     return document.body;
   }
 
-  private getOuterHTML(element: HTMLElement): string {
-    return element.outerHTML;
-  }
-
   private getText(element: HTMLElement): string {
     return element.textContent ?? '';
   }
@@ -58,23 +40,8 @@ export class HTMLTokenizer {
       switch (node.nodeType) {
         case 1:
           const element = node as unknown as HTMLElement;
-          const tagName = element.tagName.toLowerCase();
 
-          const closing = !HTMLTokenizer.voidTags.includes(tagName)
-            ? `</${tagName}>`
-            : undefined;
-
-          const openingPattern = /<[A-Za-z0-9]+.*?\/?>/;
-
-          yield {
-            tag: {
-              name: tagName,
-              opening:
-                this.getOuterHTML(element).match(openingPattern)?.at(0) ?? '',
-              closing,
-            },
-            type: TokenType.HTML,
-          };
+          yield new HTMLToken(element);
 
           yield* this.parseHTMLElement(element);
 

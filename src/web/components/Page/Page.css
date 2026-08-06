@@ -1,6 +1,5 @@
 @layer prospero {
-  .page,
-  .slate {
+  .page {
     box-sizing: border-box;
     height: 100%;
     overflow-y: hidden;
@@ -23,9 +22,9 @@
     }
   }
 
-  .slate {
+  .page.slate {
     box-sizing: border-box;
-    left: -99in;
-    position: absolute;
+    left: -99in !important;
+    position: absolute !important;
   }
 }

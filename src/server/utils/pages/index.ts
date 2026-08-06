@@ -111,7 +111,7 @@ export class Pages implements IPages {
 
     const page = await context.newPage();
 
-    await page.goto(`${codeUrl}/index.js`);
+    await page.goto(`${codeUrl}/components.js`);
 
     interface PageData {
       codeUrl: string;

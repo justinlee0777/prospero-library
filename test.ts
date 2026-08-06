@@ -8,11 +8,10 @@ export const bookStyles: BookStyles = {
     'font-size': '16px',
     'line-height': '2',
     padding: '2em 1em',
-  },
-  containerStyles: {
     width: '375px',
     height: '667px',
   },
+  containerStyles: {},
 };
 
 const text = await readFile(
